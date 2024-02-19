@@ -1,0 +1,103 @@
+.dashboard-body {
+    display: grid;
+    grid-template-columns: 280px calc(100% - 300px);
+    column-gap: 20px;
+}
+
+.dashboard-container {
+    width: 100%;
+    padding: 0 75px 50px 0;
+}
+
+.dashboard-header h1 {
+    font-size: 22px;
+    /* margin-bottom: 15px; */
+    padding-top: 90px;
+    font-weight: 500;
+}
+ 
+hr {
+    color: #b7b7b7;
+    margin-bottom: 10px;
+    width: 98%;
+}
+
+.dashboard-cards {
+    box-sizing: border-box;
+    box-shadow: 0 3px 3px 3px #ececec;
+    max-width: 250px;
+    text-align: left;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.dashboard-cards-display {
+    display: grid;
+    grid-template-columns: 300px 300px 300px;
+    column-gap: 0px;
+    row-gap: 50px;
+}
+
+/* .card {
+    margin-top: 20px;
+    box-shadow: 0px 4px 4px 4px #ececec;
+} */
+
+.card-text {
+    margin-bottom: 40px;
+    color: var(--blue);
+
+}
+
+.card-name {
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+
+.card-stats {
+    font-size: 40px;
+    font-weight: 400;
+    margin-right: 10px;
+}
+
+.icon i {
+    font-size: 28px;
+}
+
+.card-link {
+    text-align: right;
+}
+
+.card-link a {
+    color: var(--blue);
+}
+
+/* SERMONS PAGE */
+.fa {
+    background-color: transparent;
+}
+
+.fa-chevron-right:active,
+.fa-chevron-right:focus,
+.fa-chevron-left:active,
+.fa-chevron-left:focus {
+    color: #999999;
+    font-size: 20px;
+    border: none !important;
+    border-color: transparent !important;
+    outline-color: transparent !important;
+    /* padding: 20px 20px; */
+}
+
+.fa-chevron-right, .fa-chevron-left{
+    color: #999999;
+    font-size: 20px;
+    margin: 30px 20px;
+    
+}
+
+.carousel-nav-buttons .btn-primary {
+    background-color: transparent;
+    border: none;
+}

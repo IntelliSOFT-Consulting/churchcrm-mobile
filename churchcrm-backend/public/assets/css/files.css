@@ -1,0 +1,17 @@
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: var(--blue);
+    color: var(--white);
+    padding-left: 10px;
+}
+.form-display{
+    width: 400px;
+}
