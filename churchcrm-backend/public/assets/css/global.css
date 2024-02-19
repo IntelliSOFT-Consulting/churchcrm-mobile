@@ -1,0 +1,31 @@
+/* CSS */
+#announcementsmodalBtn {
+  background-color: #0962d6;
+  border-radius: 10px;
+  border-style: none;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  height: 50px;
+  padding: 14px;
+  text-decoration: none;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.image_display {
+  height: 300px;
+  width: 300px;
+  /* background-image: url('../images/blurholder.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center; */
+}
+
+.profile_display img {
+  height: 200px;
+  width: 200px;
+  border-radius: 100%;
+}
