@@ -96,6 +96,12 @@ const DrawerNavigator = ({
   setReloadNotes,
   setNoteId,
   navigation,
+  setAnnouncement,
+  announcement,
+  setSermonNote,
+  sermonNote,
+  setSermon,
+  sermon,
 }) => {
   const [userData, setUserData] = useState(null);
   useEffect(() => {
@@ -151,6 +157,12 @@ const DrawerNavigator = ({
             reloadNotes={reloadNotes}
             setReloadNotes={setReloadNotes}
             setNoteId={setNoteId}
+            setAnnouncement={setAnnouncement}
+            announcement={announcement}
+            setSermonNote={setSermonNote}
+            sermonNote={sermonNote}
+            setSermon={setSermon}
+            sermon={sermon}
           />
         )}
         options={{

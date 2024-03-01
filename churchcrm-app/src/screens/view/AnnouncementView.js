@@ -1,43 +1,77 @@
-import React, {useState} from 'react';
-import {Text, Image, ScrollView, RefreshControl} from 'react-native';
-import {styles} from '../../assets/css/Global';
-import Announcements from '../ListView/Announcements';
-const AnnouncementView = ({route}) => {
-  const {announcement, imageUri} = route.params;
-  const [refreshing, setRefreshing] = useState(false);
-  const [data, setData] = useState({
-    announcements: [],
-  });
+import React, { useState } from 'react';
+import { Text, Image, ScrollView, TouchableOpacity, View } from 'react-native';
+import { styles as Global } from '../../assets/css/Global';
+import { styles } from '../../assets/css/HomeScreen';
+import { useEffect } from 'react';
+import { BASE_URL } from '../../hooks/HandleApis';
+import { useNavigation } from '@react-navigation/native';
+import AnnouncementItem from './Item_Views/AnnouncementItem';
 
-  const onRefresh = () => {
-    setRefreshing(true);
+const AnnouncementView = ({ announcement, setAnnouncement }) => {
+  const [announcementsData, setAnnouncementsData] = useState([]);
+  const [announcementsLoading, setAnnouncementsLoading] = useState(true);
+  const navigation = useNavigation()
 
-    setTimeout(() => {
-      setData({
-        announcements: [],
-      });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response = await fetch(`${BASE_URL}/api/fetchAnnouncements`);
+        data = await response.json();
+        setAnnouncementsData(data);
+        setAnnouncementsLoading(false)
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
 
-      setRefreshing(false);
-    }, 2000);
-  };
+  }, []);
+
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      <Image style={styles.image} source={{uri: imageUri}} />
+    <ScrollView style={Global.container}>
+      {announcementsLoading ? (
+        <Text style={styles.loadingText}>Loading...</Text>
+      ) : (
+        <View>
+          <Image style={Global.image} source={{ uri: `${BASE_URL}/Announcements/${announcement.poster}` }} />
 
-      <Text style={styles.dataDate}>
-        {new Date(announcement.created_at).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })}
-      </Text>
-      <Text style={styles.dataTopic}>{announcement.Topic}</Text>
-      <Text style={styles.text}>{announcement.Message}</Text>
-      <Announcements data={data.announcements} />
+          <Text style={Global.dataDate}>
+            {new Date(announcement.created_at).toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </Text>
+            <Text style={Global.announcementTopic}>{announcement.Topic}</Text>
+          <Text style={{ ...Global.text, marginBottom: 20 }}>{announcement.Message}</Text>
+
+          {/* View announcement recommendations */}
+          <ScrollView horizontal={true}>
+            {announcementsData && announcementsData.length > 0 ? (
+              announcementsData.map(announcementsRec => (
+                announcementsRec.id != announcement.id ? (
+                  <TouchableOpacity
+                    styles={{ marginTop: 20 }}
+                    key={announcementsRec.id}
+                    onPress={() => {
+                      setAnnouncement(announcementsRec)
+                      navigation.navigate('AnnouncementView')
+                    }
+                    }>
+                    <AnnouncementItem announcement={announcementsRec} />
+                  </TouchableOpacity>
+                ) : (
+                  <>
+                  </>
+                )
+              ))
+            ) : (
+              <Text style={styles.loadingText}>No announcements to display</Text>
+            )
+            }
+          </ScrollView>
+        </View>
+      )}
     </ScrollView>
   );
 };

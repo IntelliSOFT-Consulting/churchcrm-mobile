@@ -3,12 +3,13 @@ import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../../assets/css/HomeScreen';
 import { BASE_URL, fetchDataByEndpoint } from '../../hooks/HandleApis';
 import { useNavigation } from '@react-navigation/native';
+import SermonNoteItem from '../view/Item_Views/SermonNoteItem';
 
 export const fetchSermonsNotes = async () => {
   return fetchDataByEndpoint('fetchSermonnotes');
 };
 
-export default function SermonNotes() {
+export default function SermonNotes({ setSermonNote }) {
   const [sermonsNotesData, setSermonsNotesData] = useState([]);
   const [sermonsNotesLoading, setSermonsNotesLoading] = useState(true);
 
@@ -37,42 +38,11 @@ export default function SermonNotes() {
           sermonsNotesData.map(sermonnotes => (
             <TouchableOpacity
               key={sermonnotes.id}
-              onPress={() =>
-                navigation.navigate('SermonNotesView', {
-                  sermon_note: sermonnotes,
-                  imageUri: `${BASE_URL}/Notes_Thumbnails/${sermonnotes.notesimage}`,
-                  sermon_note_id: sermonnotes.id
-                })
-              }>
-              <View key={sermonnotes.id}>
-                <View style={{ flexDirection: 'row', paddingTop: 10, paddingBottom: 10, paddingLeft: 10 }}>
-                  <View style={{ marginRight: 3 }}>
-                    <Image
-                      style={styles.image}
-                      source={{
-                        uri: `${BASE_URL}/Notes_Thumbnails/${sermonnotes.notesimage}`,
-                      }}
-                    />
-                    <Text style={styles.sermonDate}>
-                      {new Date(sermonnotes.created_at).toLocaleDateString(
-                        undefined,
-                        {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        },
-                      )}
-                    </Text>
-                    <Text style={styles.sermonText}>
-                      {sermonnotes.sermondescription.length > 25 ? 
-                      (sermonnotes.sermondescription.slice(0, 25)+'...') : 
-                      (sermonnotes.sermondescription)
-                      }
-
-                    </Text>
-                  </View>
-                </View>
-              </View>
+              onPress={() => {
+                setSermonNote(sermonnotes)
+                navigation.navigate('SermonNotesView')
+              }}>
+              <SermonNoteItem sermonNote={sermonnotes} />
             </TouchableOpacity>
           ))
         ) : (

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import {BASE_URL, fetchDataByEndpoint} from '../../hooks/HandleApis';
-import {useNavigation} from '@react-navigation/native';
-import {styles} from '../../assets/css/SermonsPage';
+import { BASE_URL, fetchDataByEndpoint } from '../../hooks/HandleApis';
+import { useNavigation } from '@react-navigation/native';
+import { styles } from '../../assets/css/SermonsPage';
 export const fetchSermons = async () => {
   return fetchDataByEndpoint('fetchSermons');
 };
 
-export default function SermonScreen() {
+export default function SermonScreen({ setSermon }) {
   const navigation = useNavigation();
   const [sermonsData, setSermonsData] = useState([]);
   const [sermonsLoading, setSermonsLoading] = useState(true);
@@ -39,11 +39,13 @@ export default function SermonScreen() {
         {sermonsLoading ? (
           <Text style={styles.loadingText}>Loading sermons...</Text>
         ) : sermonsData && sermonsData.length > 0 ? (
-          sermonsData.map(sermon => (
+          sermonsData.map(sermonClicked => (
             <TouchableOpacity
-              key={sermon.id}
+              key={sermonClicked.id}
               onPress={() =>
-                navigation.navigate('VideoPlayer', {sermon: sermon})
+              {
+                setSermon(sermonClicked)
+                  navigation.navigate('VideoPlayer')}
               }>
               <View style={styles.sermonTouchable}>
                 <ImageBackground
@@ -51,12 +53,12 @@ export default function SermonScreen() {
                   imageStyle={styles.image}
                   resizeMode="cover"
                   source={{
-                    uri: `${BASE_URL}/SermonThumbnails/${sermon.Thumbnail}`,
+                    uri: `${BASE_URL}/SermonThumbnails/${sermonClicked.Thumbnail}`,
                   }}>
                   <View style={styles.imageOverlay}></View>
                   <View style={styles.textContainer}>
                     <Text style={styles.dataDate}>
-                      {new Date(sermon.sermon_date).toLocaleDateString(
+                      {new Date(sermonClicked.sermon_date).toLocaleDateString(
                         undefined,
                         {
                           year: 'numeric',
@@ -67,9 +69,9 @@ export default function SermonScreen() {
                     </Text>
 
                     <Text style={styles.text}>
-                      {sermon.Title.length > 31
-                        ? sermon.Title.slice(0, 31) + '...'
-                        : sermon.Title}
+                      {sermonClicked.Title.length > 31
+                        ? sermonClicked.Title.slice(0, 31) + '...'
+                        : sermonClicked.Title}
                     </Text>
                   </View>
                 </ImageBackground>

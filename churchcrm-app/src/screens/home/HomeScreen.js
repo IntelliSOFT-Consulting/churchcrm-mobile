@@ -5,7 +5,7 @@ import Announcements from '../ListView/Announcements';
 import Sermons from '../ListView/Sermons';
 import SermonsNotes from '../ListView/SermonNotes';
 
-const Home = () => {
+const Home = ({ setAnnouncement, announcement, setSermonNote, sermonNote, setSermon, sermon }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState({
     verseOfTheDay: {},
@@ -35,9 +35,9 @@ const Home = () => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
       <VerseOfTheDay data={data.verseOfTheDay} />
-      <Announcements data={data.announcements} />
-      <Sermons data={data.sermons} />
-      <SermonsNotes data={data.sermonNotes} />
+      <Announcements data={data.announcements} setAnnouncement={setAnnouncement} announcement={announcement}/>
+      <Sermons data={data.sermons} setSermon={setSermon} sermon={sermon}/>
+      <SermonsNotes data={data.sermonNotes} setSermonNote={setSermonNote} sermonNote={sermonNote} />
     </ScrollView>
   );
 };
