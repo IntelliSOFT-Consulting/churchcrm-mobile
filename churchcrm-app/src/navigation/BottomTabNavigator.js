@@ -6,6 +6,7 @@ import SermonScreen from '../screens/sermons/SermonScreen';
 import EventsScreen from '../screens/EventsScreen';
 import Notes from '../screens/Notes';
 import HomeStackNavigator from '../screens/home/HomeScreen';
+import Events from '../screens/ListView/Events';
 
 const HomeScreen = 'Home';
 const Sermons = 'Sermons';
@@ -14,7 +15,7 @@ const events = 'Events';
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabNavigator = ({ userId, reloadNotes, setReloadNotes, setNoteId }) => {
+const BottomTabNavigator = ({ userId, reloadNotes, setReloadNotes, setNoteId, setAnnouncement, announcement, setSermonNote, sermonNote, setSermon, sermon }) => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -54,7 +55,16 @@ const BottomTabNavigator = ({ userId, reloadNotes, setReloadNotes, setNoteId }) 
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeStackNavigator}
+        children={() => (
+          <HomeStackNavigator
+            announcement={announcement}
+            setAnnouncement={setAnnouncement}
+            sermonNote={sermonNote}
+            setSermonNote={setSermonNote}
+            sermon={sermon}
+            setSermon={setSermon}
+          />
+        )}
         options={{
           tabBarVisible: false,
           title: 'Home',
@@ -67,7 +77,12 @@ const BottomTabNavigator = ({ userId, reloadNotes, setReloadNotes, setNoteId }) 
       />
       <Tab.Screen
         name="Sermons"
-        component={SermonScreen}
+        children={() => (
+          <SermonScreen
+            setSermon={setSermon}
+            sermon={sermon}
+          />
+        )}
         options={{ tabBarVisible: false }}
       />
       <Tab.Screen
@@ -84,7 +99,7 @@ const BottomTabNavigator = ({ userId, reloadNotes, setReloadNotes, setNoteId }) 
       />
       <Tab.Screen
         name="Events"
-        component={EventsScreen}
+        component={Events}
         options={{ tabBarVisible: false }}
       />
     </Tab.Navigator>

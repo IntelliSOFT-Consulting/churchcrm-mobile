@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 30,
     backgroundColor: '#087E8B',
+    borderRadius: 3,
   },
   headerText: {
     fontSize: 18,
@@ -31,15 +32,26 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'space-between',
   },
+  nameText: {
+    fontSize: 18,
+    fontWeight: '900',
+    textAlign: 'center',
+    marginTop: 10,
+    color: 'white',
+    paddingBottom: 10,
+  },
   profiletxt: {
     color: '#000000',
     paddingLeft: 10,
     fontSize: 18,
   },
-  icon: {
-    color: '#000000',
+  profileEditIcon: {
+    color: '#087E8B',
     marginRight: 10,
-    fontSize: 18,
+    fontSize: 16,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    fontWeight: '800'
   },
 
   image_logo: {
@@ -64,6 +76,18 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#000000',
+  },
+  profileText: {
+    color: '#087E8B',
+    fontSize: 16,
+    fontWeight: '500',
+    marginLeft: 10,
+  },
+  profileDetails: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 
   //The dropdown

@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {View, ScrollView, Text, Image, TouchableOpacity} from 'react-native';
-import {styles} from '../../assets/css/EventsScreen';
-import {useNavigation} from '@react-navigation/native';
-import {BASE_URL, fetchDataByEndpoint} from '../../hooks/HandleApis';
-import GlobalCss from '../../assets/css/GlobalCss';
+import React, { useEffect, useState } from 'react';
+import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
+import { styles } from '../../assets/css/EventsScreen';
+import { useNavigation } from '@react-navigation/native';
+import { BASE_URL, fetchDataByEndpoint } from '../../hooks/HandleApis';
+import EventItem from '../view/Item_Views/EventItem';
 export const fetchEvents = async () => {
   return fetchDataByEndpoint('fetchEvents');
 };
@@ -24,7 +24,7 @@ export default function Events() {
     };
 
     fetchData();
-  }, []);
+  }, [eventLoading]);
 
   const navigation = useNavigation();
 
@@ -37,64 +37,43 @@ export default function Events() {
     event => new Date(event.Event_Date) >= currentDate,
   );
 
-  const renderEventItem = event => (
-    <TouchableOpacity
-      key={event.id}
-      onPress={() =>
-        navigation.navigate('EventView', {
-          event,
-          imageUri: `${BASE_URL}/EventImages/${event.Img_Path}`,
-        })
-      }
-      style={styles.eventItem}>
-      <View style={GlobalCss.container}>
-        <Image
-          style={styles.image}
-          source={{
-            uri: `${BASE_URL}/EventImages/${event.Img_Path}`,
-          }}
-        />
-        <Text style={styles.dataDate}>
-          {new Date(event.Event_Date).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </Text>
-        <View style={styles.dataText}>
-          <Text style={styles.text}>{event.Event_Title}</Text>
-        </View>
-        <Text style={styles.text}>
-          {event.Event_Description.slice(0, 15)}...
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
 
   return (
     <View style={styles.Container}>
-      <ScrollView horizontal={false}>
+      <ScrollView >
         <View style={styles.eventContainer}>
           {/* Upcoming Events Section */}
           <View style={styles.eventSection}>
             <Text style={styles.sectionTitle}>Upcoming Events</Text>
             {eventLoading ? (
-              <Text>Loading Upcoming Events...</Text>
-            ) : upcomingEvents.length > 0 ? (
-              <View style={styles.eventRow}>
-                {upcomingEvents.map(
-                  (event, index) =>
-                    index % 2 === 0 && (
-                      <View style={styles.viewStyles} key={index}>
-                        {renderEventItem(event)}
-                        {index + 1 < upcomingEvents.length &&
-                          renderEventItem(upcomingEvents[index + 1])}
-                      </View>
+              <Text style={styles.loadingText}>Loading Upcoming Events...</Text>
+            ) : upcomingEvents && upcomingEvents.length > 0 ? (
+              <ScrollView horizontal={true}>
+                <View style={styles.eventRow}>
+                  {upcomingEvents.map(
+                    (eventArray, index) => (
+                      new Date(eventArray.Event_Date) >= currentDate ? (
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => navigation.navigate('EventView',
+                            {
+                              event: eventArray,
+                              imageUri: `${BASE_URL}/EventImages/${eventArray.Img_Path}`
+                            })}
+                        >
+                          <EventItem event={eventArray} />
+                        </TouchableOpacity>
+                      ) : (
+                        <>
+                        </>
+                      )
                     ),
-                )}
-              </View>
+                  )}
+                </View>
+              </ScrollView>
+
             ) : (
-              <Text style={styles.text}>No Upcoming Events</Text>
+              <Text style={styles.loadingText}>No Upcoming Events</Text>
             )}
           </View>
 
@@ -103,21 +82,31 @@ export default function Events() {
             <Text style={styles.sectionTitle}>Past Events</Text>
             {eventLoading ? (
               <Text>Loading Past Events...</Text>
-            ) : pastEvents.length > 0 ? (
-              <View style={styles.eventRow}>
-                {pastEvents.map(
-                  (event, index) =>
-                    index % 2 === 0 && (
-                      <View style={styles.viewStyles} key={index}>
-                        {renderEventItem(event)}
-                        {index + 1 < pastEvents.length &&
-                          renderEventItem(pastEvents[index + 1])}
-                      </View>
+            ) : pastEvents && pastEvents.length > 0 ? (
+              <ScrollView horizontal={true}>
+                <View style={styles.eventRow}>
+                  {pastEvents.map(
+                    (eventArray, index) => (
+                      new Date(eventArray.Event_Date) < currentDate ? (
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => navigation.navigate('EventView',
+                            {
+                              event: eventArray,
+                              imageUri: `${BASE_URL}/EventImages/${eventArray.Img_Path}`
+                            })}>
+                          <EventItem event={eventArray} />
+                        </TouchableOpacity>
+                      ) : (
+                        <>
+                        </>
+                      )
                     ),
-                )}
-              </View>
+                  )}
+                </View>
+              </ScrollView>
             ) : (
-              <Text style={styles.text}>No Past Events</Text>
+              <Text style={styles.loadingText}>No Past Events</Text>
             )}
           </View>
         </View>

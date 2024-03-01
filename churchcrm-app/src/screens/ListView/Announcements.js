@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {View, ScrollView, Text, Image, TouchableOpacity} from 'react-native';
-import {styles} from '../../assets/css/HomeScreen';
-import {useNavigation} from '@react-navigation/native';
-import {BASE_URL, fetchDataByEndpoint} from '../../hooks/HandleApis';
+import React, { useEffect, useState } from 'react';
+import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
+import { styles } from '../../assets/css/HomeScreen';
+import { useNavigation } from '@react-navigation/native';
+import { BASE_URL, fetchDataByEndpoint } from '../../hooks/HandleApis';
 import GlobalCss from '../../assets/css/GlobalCss';
+import AnnouncementItem from '../view/Item_Views/AnnouncementItem';
 
 export const fetchAnnouncements = async () => {
   return fetchDataByEndpoint('fetchAnnouncements');
 };
 
-export default function Announcements() {
+export default function Announcements({ setAnnouncement, announcement }) {
   const [announcementsData, setAnnouncementsData] = useState([]);
   const [announcementsLoading, setAnnouncementsLoading] = useState(true);
 
@@ -40,39 +41,13 @@ export default function Announcements() {
           announcementsData.map(announcements => (
             <TouchableOpacity
               key={announcements.id}
-              onPress={() =>
-                navigation.navigate('AnnouncementView', {
-                  announcement: announcements,
-                  imageUri: `${BASE_URL}/Announcements/${announcements.poster}`,
-                })
+              onPress={() => {
+                setAnnouncement(announcements)
+                navigation.navigate('AnnouncementView')
+              }
+    
               }>
-              <View>
-                <View style={{flexDirection: 'row', paddingTop: 5}}>
-                  <View style={{marginRight: 10}}>
-                    <Image
-                      style={styles.image}
-                      source={{
-                        uri: `${BASE_URL}/Announcements/${announcements.poster}`,
-                      }}
-                    />
-                    <Text style={styles.dataDate}>
-                      {new Date(announcements.created_at).toLocaleDateString(
-                        undefined,
-                        {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        },
-                      )}
-                    </Text>
-                    <View style={styles.dataText}>
-                      <Text style={styles.text}>
-                        {announcements.Topic.slice(0, 25)}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
+              <AnnouncementItem announcement={announcements} />
             </TouchableOpacity>
           ))
         ) : (

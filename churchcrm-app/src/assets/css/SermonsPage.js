@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
+    marginHorizontal: 5,
     paddingTop: 15,
     width: '100%',
     display: 'flex',
@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
   imageOverlay: {
     position: 'absolute',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    width: '100%',
+    width: '95%',
     height: '100%',
     borderRadius: 5,
   },
   image: {
-    width: '100%',
+    width: '95%',
     height: 150,
     borderRadius: 5,
   },

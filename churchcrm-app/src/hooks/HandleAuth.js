@@ -1,6 +1,6 @@
-import {BASE_URL} from './HandleApis';
+import { BASE_URL } from './HandleApis';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useRef} from 'react';
+import { useRef } from 'react';
 
 const useAuth = () => {
   const config = {
@@ -10,15 +10,16 @@ const useAuth = () => {
 
   let token = null;
   let userId = null;
-  let stored_userId = null;
-  let stored_token = null;
+  let loginTime = null;
   let retrieved_userId = null;
   let retrieved_token = null;
+  let retrieved_time = null;
 
-  const storeUserData = async (token, userId) => {
+  const storeUserData = async (token, userId, loginTime) => {
     try {
       await AsyncStorage.setItem('userId', userId.toString());
-      await AsyncStorage.setItem('userToken', token);
+      await AsyncStorage.setItem('userToken', token.toString());
+      await AsyncStorage.setItem('loginTime', loginTime.toString())
     } catch (error) {
       console.error('Error storing user data:', error);
     }
@@ -29,19 +30,22 @@ const useAuth = () => {
       const response = await fetch(`${BASE_URL}/api/login`, {
         method: 'POST',
         headers: config,
-        body: JSON.stringify({email, password}),
+        body: JSON.stringify({ email, password }),
       });
 
       if (response.ok) {
         const data = await response.json();
         token = data.access_token;
         userId = data.user_id;
+        loginTime = new Date().getTime()
 
-        storeUserData(token, userId);
+        storeUserData(token, userId, loginTime);
 
         const my_id = await AsyncStorage.getItem('userId');
+        const my_token = await AsyncStorage.getItem('userToken')
+        console.log("ID and token: ", my_id, my_token, loginTime)
 
-        return {my_id};
+        return { my_id, my_token, loginTime };
       } else {
         return null;
       }
@@ -51,10 +55,22 @@ const useAuth = () => {
   };
 
   const handleLogout = async () => {
+    let the_token = await AsyncStorage.getItem('userToken');
+    let the_userId = await AsyncStorage.getItem('userId');
+
+    console.log("Saved token and ID:", the_token, the_userId)
+
     try {
-      // Clear user data from AsyncStorage
-      await AsyncStorage.removeItem('userToken');
-      await AsyncStorage.removeItem('userId');
+      const my_Arr = ['userToken', 'userId']
+      AsyncStorage.multiRemove(my_Arr, err => {
+        console.log(err);
+      });
+      // await AsyncStorage.removeItem('userToken');
+      // await AsyncStorage.removeItem('userId');
+      let the_token = await AsyncStorage.getItem('userToken');
+      let the_userId = await AsyncStorage.getItem('userId');
+    
+      console.log("Saved token and after removing ID:", the_token, the_userId)
 
       return {
         userId,
@@ -69,8 +85,8 @@ const useAuth = () => {
     try {
       retrieved_userId = await AsyncStorage.getItem('userId');
       retrieved_token = await AsyncStorage.getItem('userToken');
-
-      return {retrieved_userId, retrieved_token};
+      retrieved_time = await AsyncStorage.getItem('loginTime')
+      return { retrieved_userId, retrieved_token, retrieved_time };
     } catch (error) {
       console.error('Error getting stored user data:', error);
       return null;

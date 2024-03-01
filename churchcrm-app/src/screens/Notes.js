@@ -150,7 +150,7 @@ export default function Notes({
             <View style={styles.colContainer}>
               {data.length > 0 ? (
                 data.map(notes => (
-                  <Pressable style={styles.modalParent} onPress={() => viewNoteScreen(notes.id)}>
+                  <Pressable key={notes.id} style={styles.modalParent} onPress={() => viewNoteScreen(notes.id)}>
                     <View style={card.cardContainer}>
                       <View style={card.notesContainer}>
                         <Text style={card.notesDateText}>

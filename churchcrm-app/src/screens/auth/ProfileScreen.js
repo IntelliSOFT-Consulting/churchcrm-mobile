@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
+import { Alert } from 'react-native';
 import {
   View,
   Image,
@@ -9,25 +10,25 @@ import {
   SafeAreaView,
   Pressable,
 } from 'react-native';
-import {useCallback} from 'react';
+import { useCallback } from 'react';
 import axios from 'axios';
 import Modal from 'react-native-modal';
-import {useRef} from 'react';
+import { useRef } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AppSnackbar from '../../hooks/SnackBar';
-import {BASE_URL} from '../../hooks/HandleApis';
-import {styles as authstyles} from '../../assets/css/AuthScreens';
+import { BASE_URL } from '../../hooks/HandleApis';
+import { styles as authstyles } from '../../assets/css/AuthScreens';
 import GlobalCss from '../../assets/css/GlobalCss';
-import {styles} from '../../assets/css/ProfileScreen';
+import { styles } from '../../assets/css/ProfileScreen';
 import CustomTextInput from '../../hooks/CustomTestInput';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {Dropdown} from 'react-native-element-dropdown';
-import {useNavigation} from '@react-navigation/native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { Dropdown } from 'react-native-element-dropdown';
+import { useNavigation } from '@react-navigation/native';
 import useAuth from '../../hooks/HandleAuth';
 
-export default function ProfileScreen({userId, setUserId}) {
+export default function ProfileScreen({ userId, setUserId }) {
   const navigation = useNavigation();
-  const {handleLogout, HandleDeletion} = useAuth();
+  const { handleLogout, HandleDeletion } = useAuth();
   const [data, setData] = useState([]);
   const appSnackbarRef = useRef();
   // dropdown selection
@@ -135,7 +136,7 @@ export default function ProfileScreen({userId, setUserId}) {
         console.log(imageUri);
         if (imageUri) {
           console.log('Selected image path:', imageUri);
-          setData(data => ({...data, profile_photo_path: imageUri}));
+          setData(data => ({ ...data, profile_photo_path: imageUri }));
         } else {
           console.log('Unable to determine image path.');
         }
@@ -145,9 +146,9 @@ export default function ProfileScreen({userId, setUserId}) {
 
   //dropdown
   const membership = [
-    {label: 'New Member', value: 'New Member', style: {color: 'black'}},
-    {label: 'Non Member', value: 'Non Member', style: {color: 'black'}},
-    {label: 'Member', value: 'Member', style: {color: 'black'}},
+    { label: 'New Member', value: 'New Member', style: { color: 'black' } },
+    { label: 'Non Member', value: 'Non Member', style: { color: 'black' } },
+    { label: 'Member', value: 'Member', style: { color: 'black' } },
   ];
   const [value, setValue] = useState(null);
   const ChangePassword = () => {
@@ -161,6 +162,20 @@ export default function ProfileScreen({userId, setUserId}) {
   //     console.error('Error signing out:', error);
   //   }
   // };
+  const showAlert = myNoteId => {
+    Alert.alert(
+      'Delete Account',
+      'Are you sure you want to delete your account?\nTHIS ACTION IS PERMANENT AND CANNOT BE UNDONE!',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'Delete', onPress: () => AccountDeletion() },
+      ],
+      { cancelable: true }
+    );
+  }
   const AccountDeletion = async () => {
     try {
       const accdeletion = await HandleDeletion();
@@ -171,16 +186,16 @@ export default function ProfileScreen({userId, setUserId}) {
   };
 
   //Profile section
-  const ProfileSection = ({iconName, text, onPress}) => {
+  const ProfileSection = ({ iconName, text, onPress }) => {
     return (
-      <Pressable onPress={onPress}>
+      <Pressable style={styles.profileDetails} onPress={onPress}>
         <View style={styles.containerSection}>
-          <Text style={styles.icon}>
-            <Icon size={20} name={iconName} />
+          <Icon size={20} name={iconName} color={'#087E8B'} />
+          <Text style={styles.profileText}>
             {text}
           </Text>
-          <Icon name="edit" style={styles.icon} />
         </View>
+        <Icon name="edit" style={styles.profileEditIcon} />
       </Pressable>
     );
   };
@@ -190,15 +205,14 @@ export default function ProfileScreen({userId, setUserId}) {
       <View style={styles.header}>
         <View>
           <Image
-            style={{...styles.image_logo, marginTop: 10}}
+            style={{ ...styles.image_logo, marginTop: 10 }}
             source={{
               uri: `${BASE_URL}/Mobile_App_Profile_Pics/${data.profile_photo_path}`,
             }}
           />
         </View>
-        <Text style={styles.headerText} onPress={toggleModal}>
+        <Text style={styles.nameText} onPress={toggleModal}>
           {data.name}
-          <Icon name="edit" style={authstyles.icon} />
         </Text>
       </View>
 
@@ -215,19 +229,19 @@ export default function ProfileScreen({userId, setUserId}) {
             onPress={toggleModal}
           />
           <ProfileSection
-            iconName="person"
+            iconName="card-membership"
             text={data.membership_status}
             onPress={toggleModal}
           />
           <ProfileSection
-            iconName="remove-red-eye"
+            iconName="password"
             text="Change Password"
             onPress={ChangePassword}
           />
           <ProfileSection
             iconName="delete"
             text="Account Deletion"
-            onPress={AccountDeletion}
+            onPress={showAlert}
           />
         </View>
 
@@ -254,7 +268,7 @@ export default function ProfileScreen({userId, setUserId}) {
                         {data.profile_photo_path && (
                           <View>
                             <Image
-                              source={{uri: data.profile_photo_path}}
+                              source={{ uri: data.profile_photo_path }}
                               style={styles.image}
                             />
                           </View>
@@ -266,7 +280,7 @@ export default function ProfileScreen({userId, setUserId}) {
                         placeholder="Name"
                         value={data.name}
                         onChangeText={text =>
-                          setData(data => ({...data, name: text}))
+                          setData(data => ({ ...data, name: text }))
                         }
                       />
 
@@ -275,7 +289,7 @@ export default function ProfileScreen({userId, setUserId}) {
                         placeholder="Email"
                         value={data.email}
                         onChangeText={text =>
-                          setData(data => ({...data, email: text}))
+                          setData(data => ({ ...data, email: text }))
                         }
                       />
 
@@ -284,7 +298,7 @@ export default function ProfileScreen({userId, setUserId}) {
                         placeholder="Phone"
                         value={data.phone}
                         onChangeText={text =>
-                          setData(data => ({...data, phone: text}))
+                          setData(data => ({ ...data, phone: text }))
                         }
                       />
 
@@ -326,7 +340,7 @@ export default function ProfileScreen({userId, setUserId}) {
                       <TouchableOpacity
                         onPress={handleUpdate}
                         title="Update"
-                        style={{...styles.signOutButton, width: '35%'}}>
+                        style={{ ...styles.signOutButton, width: '35%' }}>
                         <Text
                           style={{
                             ...authstyles.auth_btn_text,
@@ -337,7 +351,7 @@ export default function ProfileScreen({userId, setUserId}) {
                       </TouchableOpacity>
 
                       <TouchableOpacity
-                        style={{...styles.signOutButton, width: '35%'}}
+                        style={{ ...styles.signOutButton, width: '35%' }}
                         onPress={toggleModal}>
                         <Text style={authstyles.auth_btn_text}>Close</Text>
                       </TouchableOpacity>

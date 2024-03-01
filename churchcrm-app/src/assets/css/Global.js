@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignSelf: 'flex-start',
-    marginBottom: 5,    
+    marginBottom: 5, 
   },
   videoPlayerDate: {
     color: 'black',
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'cover',
     marginBottom: 10,
+    borderRadius: 3,
   },
   itemImage: {
     width: '100%',
@@ -58,11 +59,9 @@ const styles = StyleSheet.create({
   },
   dataTopic: {
     color: '#000000',
-    fontSize: 2,
+    fontSize: 20,
     fontWeight: '600',
     paddingTop: 0,
-    // borderBottomColor:
-    // paddingBottom: 7,
   },
   dataSermonTopic: {
     color: '#000000',
@@ -72,7 +71,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 7,
     marginBottom: 5,
-    // borderBottomColor:
   },
   dataParagraph: {
     fontSize: 12,
@@ -92,5 +90,17 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#ffffff',
   },
+  
+  // Announcement View 
+  announcementTopic: {
+    color: '#000000',
+    fontSize: 20,
+    fontWeight: '600',
+    paddingTop: 0,
+    paddingBottom: 5,
+    marginBottom: 10,
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#000000',
+  }
 });
 export {styles};
