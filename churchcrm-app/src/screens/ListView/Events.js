@@ -79,7 +79,7 @@ export default function Events() {
 
           {/* Past Events Section */}
           <View style={styles.eventSection}>
-            <Text style={styles.sectionTitle}>Past Events</Text>
+            <Text style={{ ...styles.sectionTitle, marginTop: 15 }}>Past Events</Text>
             {eventLoading ? (
               <Text>Loading Past Events...</Text>
             ) : pastEvents && pastEvents.length > 0 ? (

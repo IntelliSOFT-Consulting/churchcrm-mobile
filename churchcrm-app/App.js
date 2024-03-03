@@ -42,7 +42,7 @@ function App() {
   const [loginTime, setLoginTime] = useState();
 
   useEffect(() => {
-    const time_out = 14400000
+    const time_out = 60 * 60 * 60 * 1000
 
     const fetchUserId = async () => {
       const storedUserData = await getStoredUserData();
@@ -51,9 +51,10 @@ function App() {
         setUserId(storedUserData.retrieved_userId);
 
         setTimeout(async () => {
-          const time_now = new Date();
-          const time_diff = Math.round((time_now.getTime() - storedUserData.retrieved_time) / (1000 * 3600));
+          let time_now = new Date();
+          const time_diff = (time_now.getTime() - storedUserData.retrieved_time) / (1000);
           console.log("Current diff: ", time_diff)
+          console.log(`Login time ${storedUserData.retrieved_time} Current time: ${time_now.getTime()}`)
           if (time_diff > time_out) {
             const { handleLogout } = useAuth();
             console.log("Logging out")
@@ -69,7 +70,6 @@ function App() {
             console.log("Current time difference: ", time_diff)
           }
         }, time_out)
-        // console.log(storedUserData);
       } else {
         setUserId(null);
         setToken(null);
@@ -135,6 +135,7 @@ function App() {
                     reloadNotes={reloadNotes}
                     setReloadNotes={setReloadNotes}
                     setNoteId={setNoteId}
+                    noteId={noteId}
                     setAnnouncement={setAnnouncement}
                     announcement={announcement}
                     setSermonNote={setSermonNote}
@@ -181,6 +182,13 @@ function App() {
                     noteId={noteId}
                   />
                 )}
+                  options={{
+                    title: 'Notes',
+                    headerStyle: {
+                      backgroundColor: '#087E8B',
+                      height: 50,
+                    },
+                  }}
               />
               <Stack.Screen
                 name="ViewNote"
@@ -253,7 +261,7 @@ function App() {
                 name="EventView"
                 component={EventView}
                 options={{
-                  title: 'Event',
+                  title: 'Events',
                   headerStyle: {
                     backgroundColor: '#087E8B',
                     height: 50,
@@ -264,7 +272,7 @@ function App() {
                 name="VideoPlayer"
                   children={() => <VideoPlayer sermon={sermon} setSermon={setSermon}/>}
                 options={{
-                  title: 'Sermon',
+                  title: 'Sermons',
                   headerStyle: {
                     backgroundColor: '#087E8B',
                     height: 50,
@@ -285,6 +293,13 @@ function App() {
               <Stack.Screen
                 name="VerseOfDayScreen"
                 component={VerseOfTheDay}
+                  options={{
+                    title: 'Daily Verse',
+                    headerStyle: {
+                      backgroundColor: '#087E8B',
+                      height: 50,
+                    },
+                  }}
               />
 
               <Stack.Screen
