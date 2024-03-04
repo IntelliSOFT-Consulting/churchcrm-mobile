@@ -95,6 +95,7 @@ const DrawerNavigator = ({
   reloadNotes,
   setReloadNotes,
   setNoteId,
+  noteId,
   navigation,
   setAnnouncement,
   announcement,
@@ -157,6 +158,7 @@ const DrawerNavigator = ({
             reloadNotes={reloadNotes}
             setReloadNotes={setReloadNotes}
             setNoteId={setNoteId}
+            noteId={noteId}
             setAnnouncement={setAnnouncement}
             announcement={announcement}
             setSermonNote={setSermonNote}

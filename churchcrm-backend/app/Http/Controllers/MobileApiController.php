@@ -80,9 +80,29 @@ class MobileApiController extends Controller
         $user = AppUser::where('id', $id)->first();
 
         if ($user) {
-            $data = Note::where('user_id_fk', $user->id)->orderBy('id', 'desc')->get();
-            if ($data) {
+            $notesData = Note::where('user_id_fk', $user->id)->orderBy('id', 'desc')->get();
+            $jsonFilePath = Storage::path('notes_file.json');
+
+            if (file_exists($jsonFilePath)) {
+                $existingNotes = file_get_contents($jsonFilePath);
+
+                $jsonData = json_decode($existingNotes, true) ?? [];
+            } else {
+                $jsonData = [];
+            }
+
+            if (array_key_exists($notesData->id, $jsonData)) {
+                $specificNote = $jsonData[$notesData->id];
+                $data = [
+                    'noteContent' => $specificNote,
+                    'notesData' => $notesData,
+                ];
                 return response()->json($data);
+            } else {
+                return response()->json(['error' => 'Note not found'], 404);
+            }
+            if ($notesData) {
+                return response()->json($notesData);
             } else {
                 return response()->json(['error' => 'User has no notes.'], 404);
             }

@@ -31,6 +31,7 @@ export default function Notes({
   reloadNotes,
   setReloadNotes,
   setNoteId,
+  noteId,
 }) {
   const navigation = useNavigation();
   const [data, setData] = useState([]);
@@ -43,19 +44,13 @@ export default function Notes({
     setModalVisible(!isModalVisible);
   };
 
-  useEffect(() => {
-    fetchData();
-    console.log('Reloading: ', reloadNotes); //
-    console.log("Modal state: ", isModalVisible)
-
-    setReloadNotes(false);
-  }, [reloadNotes]);
 
   const fetchData = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/showNotes/${userId}`);
       if (response.ok) {
         const responseData = await response.json();
+        console.log("RESPONSE DATA: ", responseData)
         if (!responseData.error) {
           setData(responseData);
         } else {
@@ -68,6 +63,14 @@ export default function Notes({
       console.error('Error fetching notes:', error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+    console.log('Reloading: ', reloadNotes); //
+    console.log("Modal state: ", isModalVisible)
+
+    setReloadNotes(false);
+  }, [reloadNotes]);
 
   const refreshData = () => {
     setIsRefreshing(true);
@@ -83,8 +86,7 @@ export default function Notes({
     navigation.navigate('ViewNote');
   };
 
-  const editNoteScreen = myNoteId => {
-    setNoteId(myNoteId);
+  const editNoteScreen = () => {
     navigation.navigate('EditNotes');
   };
 
@@ -104,10 +106,10 @@ export default function Notes({
     );
   }
 
-  const deleteNote = async myNoteId => {
+  const deleteNote = async() => {
 
     try {
-      const response = await fetch(`${BASE_URL}/api/deletenote/${myNoteId}`, {
+      const response = await fetch(`${BASE_URL}/api/deletenote/${noteId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -125,16 +127,39 @@ export default function Notes({
     }
   };
   //share
-  // Inside your functional component
-  const shareNote = (shareTopic, shareText) => {
+  const fetchNoteContent = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/getNote/${noteId}`);
+      if (response.ok) {
+        const notesData = await response.json();
+        if (!notesData.error) {
+          return notesData;
+        } else {
+          console.error('Note not found');
+        }
+      } else {
+        console.error('Failed to fetch data:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Displaying notes failed:', error);
+    }
+  };
+  const shareNote = async () => {
+    const mySharedNote = await fetchNoteContent(noteId);
+    const noteContent = mySharedNote.content
+    const convertedText = noteContent.replace(/<[^>]+>/g, '');
     Share.share({
-      message: shareText,
-      title: shareTopic,
+      message: convertedText,
+      title: mySharedNote.note_topic,
     })
       .then(result => console.log(result))
       .catch(error => console.log(error));
   };
 
+  const openModal = (myNoteId) => {
+    setNoteId(myNoteId);
+    setModalVisible(!isModalVisible)
+  }
   return (
     <View>
       <TouchableOpacity style={styles.notesPageTitle} onPress={NewNoteScreen} >
@@ -148,50 +173,54 @@ export default function Notes({
         <View style={GlobalCss.container}>
           <ScrollView horizontal={false}>
             <View style={styles.colContainer}>
-              {data.length > 0 ? (
+              {data && data.length > 0 ? (
                 data.map(notes => (
-                  <Pressable key={notes.id} style={styles.modalParent} onPress={() => viewNoteScreen(notes.id)}>
-                    <View style={card.cardContainer}>
-                      <View style={card.notesContainer}>
-                        <Text style={card.notesDateText}>
-                          {moment(notes.updated_at).format('DD MMMM - HH:mm a')}
-                        </Text>
-                        <Text style={card.notesTopic}>{notes.note_topic}</Text>
-                      </View>
-                      <Pressable
-                        style={card.threeDotsIcon}
-                        onPress={() => setModalVisible(!isModalVisible)}>
-                        <Icon name={'more-vert'} size={26} color="#ffffff" />
-                      </Pressable>
-                    </View>
-
-                    <Modal
-                      visible={isModalVisible}
-                      style={card.notesModal}
-                      transparent={true}
-                      noteId={notes.id}>
-                      <Pressable
-                        style={card.overlay}
-                        onPress={() => setModalVisible(false)}>
-                        <View style={card.modalView}>
-                          <Pressable style={{ ...card.modalContent, marginTop: 0 }} onPress={() => editNoteScreen(notes.id)}>
-                            <View><Icon name={'edit'} color="#087E8B" size={20} /></View>
-                            <View><Text style={card.iconText}>Edit</Text></View>
-                          </Pressable>
-                          <Pressable style={card.modalContent} onPress={() => showAlert(notes.id)}>
-                            <View><Icon name={'delete'} color="#087E8B" size={20} /></View>
-                            <View><Text style={card.iconText}>Delete</Text></View>
-                          </Pressable>
-                          <Pressable style={card.modalContent} onPress={() => shareNote(notes.note_topic, notes.content)}>
-                            <View><Icon name={'share'} color="#087E8B" size={20} /></View>
-                            <View><Text style={card.iconText}>Share</Text></View>
+                  <View key={notes.id} >
+                    <Pressable style={styles.modalParent} onPress={() => viewNoteScreen(notes.id)}>
+                      <View>
+                        <View style={card.cardContainer}>
+                          <View style={card.notesContainer}>
+                            <Text style={card.notesDateText}>
+                              {moment(notes.updated_at).format('DD MMMM yy - HH:mm a')}
+                            </Text>
+                            <Text style={card.notesTopic}>{notes.note_topic}</Text>
+                          </View>
+                          <Pressable
+                            style={card.threeDotsIcon}
+                            onPress={() => openModal(notes.id)}>
+                            <Icon name={'more-vert'} size={26} color="#ffffff" />
                           </Pressable>
                         </View>
-                      </Pressable>
-                    </Modal>
-                  </Pressable>
 
-
+                        <Modal
+                          visible={isModalVisible}
+                          style={card.notesModal}
+                          transparent={true}
+                        >
+                          <Pressable
+                            style={card.overlay}
+                            onPress={() => setModalVisible(false)}>
+                            <View style={card.modalView}>
+                              <Pressable style={{ ...card.modalContent, marginTop: 0 }} onPress={() => editNoteScreen(notes.id)}>
+                                <View><Icon name={'edit'} color="#087E8B" size={20} /></View>
+                                <View><Text style={card.iconText}>Edit</Text></View>
+                              </Pressable>
+                              <Pressable style={card.modalContent} onPress={() => showAlert(notes.id)}>
+                                <View><Icon name={'delete'} color="#087E8B" size={20} /></View>
+                                <View><Text style={card.iconText}>Delete</Text></View>
+                              </Pressable>
+                              <Pressable style={card.modalContent} onPress={() => {
+                                shareNote(notes.id)
+                              }}>
+                                <View><Icon name={'share'} color="#087E8B" size={20} /></View>
+                                <View><Text style={card.iconText}>Share</Text></View>
+                              </Pressable>
+                            </View>
+                          </Pressable>
+                        </Modal>
+                      </View>
+                    </Pressable>
+                  </View>
                 ))
               ) : (
                 <Text style={styles.loadingText}>Loading ...</Text>
