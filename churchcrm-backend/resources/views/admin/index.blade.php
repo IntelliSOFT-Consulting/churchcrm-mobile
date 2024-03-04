@@ -29,7 +29,7 @@
             @include('admin.layout.aside')
         </div>
         <div class="main">
-            @include('admin.layout.body')
+            @include('admin.home.body')
         </div>
     </div>
     {{-- scripts  --}}

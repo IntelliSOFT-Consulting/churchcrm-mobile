@@ -38,6 +38,16 @@
                 </span>
             </p>
         </a>
+        <a class='link'  href="{{ route('short-videos') }}">
+            <p class="nav-link">
+                <span class="icon">
+                    <i class="fa-solid fa-book-bible"></i>
+                </span>
+                <span class="title">
+                    Short Videos
+                </span>
+            </p>
+        </a>
         <a class='link'  href="{{ route('sermonsnotes') }}">
             <p class="nav-link">
                 <span class="icon">

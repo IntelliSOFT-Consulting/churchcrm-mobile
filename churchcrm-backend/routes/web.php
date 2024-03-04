@@ -44,6 +44,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Sermons
     Route::post('new-sermons', [AdminController::class, 'newsermons'])->name('new-sermons');
     Route::get('sermons', [AdminController::class, 'sermons'])->name('sermons');
+    // short-videos
+    Route::get('short-videos', [AdminController::class, 'shortvideos'])->name('short-videos');
+    //shortvideoupload
+    Route::post('short-video-upload', [AdminController::class, 'shortvideoupload'])->name('short-video-upload');
 
     // Sermon notes
     Route::get('notessermons', [AdminController::class, 'sermonsnotes'])->name('sermonsnotes');
