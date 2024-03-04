@@ -7,6 +7,7 @@ use App\Models\Announcement;
 use App\Models\Sermons;
 use App\Models\SermonNotes;
 use App\Models\Event;
+use App\Models\ShortVideo;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -459,7 +460,7 @@ class AdminController extends Controller
             $notesfileName = time() . '.' . $fileExtension;
             $request->file('notesupload')->move('SermonNotes/', $notesfileName);
         }
-       
+
         $sermonnotes->update([
             'notesupload' => $notesfileName,
             'sermondescription' => $request->sermondescription,
@@ -543,5 +544,50 @@ class AdminController extends Controller
     public function adminprofile()
     {
         return view('admin.pages.adminprofile');
+    }
+    //shortvideos
+    public function shortvideos()
+    {
+        return view('admin.pages.short-videos');
+    }
+
+    public function shortvideoupload(Request $request)
+    {
+        $shortvideo = new ShortVideo();
+        $request->validate([
+            'Thumbnail' => 'mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'shortvideo' =>'mimes:mp4|max:20480',
+        ]);
+        $shortvideo->title = $request->title;
+        $shortvideo->video_description = $request->video_description;
+        $thumbnailFile = $request->file('Thumbnail');
+        if ($thumbnailFile) {
+            $validExtensions = ['jpeg', 'png', 'jpg', 'webp', 'svg'];
+            $fileExtension = strtolower($thumbnailFile->getClientOriginalExtension());
+            if (!in_array($fileExtension, $validExtensions)) {
+                return redirect()
+                    ->back()
+                    ->with('error', 'Invalid file format. Please upload a jpeg, jpg,  png, webp, svg file.');
+            }
+            $thumbnailFileName = time() . '.' . $fileExtension;
+            $thumbnailFile->move('ShortVideoThumbnails/', $thumbnailFileName);
+            $shortvideo->thumbnail_path = $thumbnailFileName;
+        }
+
+        $video = $request->file('shortvideo');
+        if ($video) {
+            $validExtensions = ['mp4'];
+            $fileExtension = strtolower($video->getClientOriginalExtension());
+            if (!in_array($fileExtension, $validExtensions)) {
+                return redirect()
+                    ->back()
+                    ->with('error', 'Invalid file format. Please upload a mp4.');
+            }
+            $videoName = time() . '.' . $fileExtension;
+            $video->move('shortvideo/', $videoName);
+            $shortvideo->video_path = $videoName;
+        }
+
+        $shortvideo->save();
     }
 }
