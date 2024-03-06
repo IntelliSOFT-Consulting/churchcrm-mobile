@@ -117,7 +117,7 @@
                                     <label>Upload Thumbnail</label><br>
                                     <label for="Thumbnail" class="custom-file-upload">
                                         Upload</label>
-                                    <input type="file" class="file" name="Thumbnail" id="Thumbnail" />
+                                    <input type="file" class="file" name="thumbnail_path" id="Thumbnail" />
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -125,7 +125,7 @@
                                     <label>Video</label><br>
                                     <label for="Notes_Thumbnail" class="custom-file-upload">
                                         Upload </label>
-                                    <input type="file" class="file" name="Notes_Thumbnail" id="Notes_Thumbnail" />
+                                    <input type="file" class="file" name="video_path" id="Notes_Thumbnail" />
                                 </div>
                             </div>
                            

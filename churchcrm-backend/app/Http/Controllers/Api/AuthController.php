@@ -49,7 +49,6 @@ class AuthController extends Controller
             'phone' => 'required|string|max:12|min:10',
             'email' => 'required|email',
             'profile_photo_path' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:5120',
-            'membership_status' => 'string',
         ]);
     
         $user = AppUser::findOrFail($id);
@@ -60,7 +59,6 @@ class AuthController extends Controller
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->phone = $validated['phone'];
-        $user->membership_status = $validated['membership_status'];
     
         if ($request->hasFile('profile_photo_path')) {
             $profile_pic = $request->file('profile_photo_path');

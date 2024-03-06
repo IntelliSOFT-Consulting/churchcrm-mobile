@@ -11,8 +11,7 @@
                 <div class="card">
                     <div class="card-block">
                         <h6>Web Users</h6>
-                        <h2 class="f-start "><span>{{ $totalwebusers }}</span><i
-                                class="fa fa-user ps-2"></i>
+                        <h2 class="f-start "><span>{{ $totalwebusers }}</span><i class="fa fa-user ps-2"></i>
                         </h2>
                         <p class="f-right"><a href="{{ route('users') }}">View all</a></p>
                     </div>
@@ -22,8 +21,7 @@
                 <div class="card">
                     <div class="card-block">
                         <h6>App Users</h6>
-                        <h2 class="f-start "><span>{{ $totalappusers }}</span><i
-                                class="fa fa-user ps-2"></i>
+                        <h2 class="f-start "><span>{{ $totalappusers }}</span><i class="fa fa-user ps-2"></i>
                         </h2>
                         <p class="f-right"><a href="{{ route('users') }}">View all</a></p>
                     </div>
@@ -86,7 +84,7 @@
             <h4>New App Users</h4>
         </div>
         <div class="table-responsive">
-<table class="table">
+            <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
@@ -135,8 +133,7 @@
                                         <p>{{ $user->membership_status }}</p>
                                     </div>
                                     <div class="modal-footer d-flex">
-                                        <button type="button"
-                                            onclick="closeUserModal('{{ $user->id }}')"
+                                        <button type="button" onclick="closeUserModal('{{ $user->id }}')"
                                             class="btn btn-outline-primary">
                                             Cancel
                                         </button>
