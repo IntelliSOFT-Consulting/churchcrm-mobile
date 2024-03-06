@@ -10,12 +10,12 @@ import ForgotPassword from './src/screens/auth/ForgotPassword';
 import ProfileScreen from './src/screens/auth/ProfileScreen';
 import SettingScreen from './src/screens/auth/SettingScreen';
 import NewNotes from './src/screens/notes/NewNotes';
-import DocumentViewer from './src/screens/DocumentViewer';
-import EventsScreen from './src/screens/EventsScreen';
-import AnnouncementView from './src/screens/view/AnnouncementView';
-import SermonNotesView from './src/screens/view/SermonNotesView';
-import EventView from './src/screens/view/EventView';
-import VideoPlayer from './src/screens/view/VideoPlayer';
+import DocumentViewer from './src/screens/sermon_notes/DocumentViewer';
+import EventsScreen from './src/screens/events/EventsScreen';
+import AnnouncementView from './src/screens/announcements/AnnouncementView';
+import SermonNotesView from './src/screens/sermon_notes/SermonNotesView';
+import EventView from './src/screens/events/EventView';
+import VideoPlayer from './src/screens/sermons/VideoPlayer';
 import SplashScreen from './src/SplashScreen';
 import VerseOfTheDay from './src/screens/VerseOfTheDay/VerseOfTheDay';
 import useAuth from './src/hooks/HandleAuth';
@@ -26,8 +26,8 @@ import ChangePassword from './src/screens/auth/ChangePassword';
 import ResetCode from './src/screens/auth/ResetCode';
 import NewPassword from './src/screens/auth/NewPassword';
 import SermonScreen from './src/screens/sermons/SermonScreen';
-import SermonNoteItem from './src/screens/view/Item_Views/SermonNoteItem';
-import EventItem from './src/screens/view/Item_Views/EventItem';
+import SermonNoteItem from './src/screens/sermon_notes/SermonNoteItem';
+import EventItem from './src/screens/events/EventItem';
 
 function App() {
   const [reloadNotes, setReloadNotes] = useState(false);
@@ -42,7 +42,7 @@ function App() {
   const [loginTime, setLoginTime] = useState();
 
   useEffect(() => {
-    const time_out = 60 * 60 * 60 * 1000
+    const time_out = 6 * 60 * 60 * 1000
 
     const fetchUserId = async () => {
       const storedUserData = await getStoredUserData();
@@ -182,13 +182,13 @@ function App() {
                     noteId={noteId}
                   />
                 )}
-                  options={{
-                    title: 'Notes',
-                    headerStyle: {
-                      backgroundColor: '#087E8B',
-                      height: 50,
-                    },
-                  }}
+                options={{
+                  title: 'Notes',
+                  headerStyle: {
+                    backgroundColor: '#087E8B',
+                    height: 50,
+                  },
+                }}
               />
               <Stack.Screen
                 name="ViewNote"
@@ -224,17 +224,17 @@ function App() {
                   },
                 }}
               />
-                <Stack.Screen
-                  name="EventsItem"
-                  component={EventItem}
-                  options={{
-                    title: 'Events',
-                    headerStyle: {
-                      backgroundColor: '#087E8B',
-                      height: 50,
-                    },
-                  }}
-                />
+              <Stack.Screen
+                name="EventsItem"
+                component={EventItem}
+                options={{
+                  title: 'Events',
+                  headerStyle: {
+                    backgroundColor: '#087E8B',
+                    height: 50,
+                  },
+                }}
+              />
               <Stack.Screen
                 name="AnnouncementView"
                 children={() => <AnnouncementView announcement={announcement} setAnnouncement={setAnnouncement} />}
@@ -246,17 +246,17 @@ function App() {
                   },
                 }}
               />
-                <Stack.Screen
-                  name="AnnouncementItem"
-                  children={() => <AnnouncementView announcement={announcement} />}
-                  options={{
-                    title: '',
-                    headerStyle: {
-                      backgroundColor: '#087E8B',
-                      height: 50,
-                    },
-                  }}
-                />
+              <Stack.Screen
+                name="AnnouncementItem"
+                children={() => <AnnouncementView announcement={announcement} />}
+                options={{
+                  title: '',
+                  headerStyle: {
+                    backgroundColor: '#087E8B',
+                    height: 50,
+                  },
+                }}
+              />
               <Stack.Screen
                 name="EventView"
                 component={EventView}
@@ -270,7 +270,7 @@ function App() {
               />
               <Stack.Screen
                 name="VideoPlayer"
-                  children={() => <VideoPlayer sermon={sermon} setSermon={setSermon}/>}
+                children={() => <VideoPlayer sermon={sermon} setSermon={setSermon} />}
                 options={{
                   title: 'Sermons',
                   headerStyle: {
@@ -293,13 +293,13 @@ function App() {
               <Stack.Screen
                 name="VerseOfDayScreen"
                 component={VerseOfTheDay}
-                  options={{
-                    title: 'Daily Verse',
-                    headerStyle: {
-                      backgroundColor: '#087E8B',
-                      height: 50,
-                    },
-                  }}
+                options={{
+                  title: 'Daily Verse',
+                  headerStyle: {
+                    backgroundColor: '#087E8B',
+                    height: 50,
+                  },
+                }}
               />
 
               <Stack.Screen
@@ -313,17 +313,17 @@ function App() {
                   },
                 }}
               />
-                <Stack.Screen
-                  name="SermonNoteItem"
-                  children={() => <SermonNoteItem sermonNote={sermonNote} />}
-                  options={{
-                    title: '',
-                    headerStyle: {
-                      backgroundColor: '#087E8B',
-                      height: 50,
-                    },
-                  }}
-                />
+              <Stack.Screen
+                name="SermonNoteItem"
+                children={() => <SermonNoteItem sermonNote={sermonNote} />}
+                options={{
+                  title: '',
+                  headerStyle: {
+                    backgroundColor: '#087E8B',
+                    height: 50,
+                  },
+                }}
+              />
               <Stack.Screen
                 name="ChangePassword"
                 component={ChangePassword}

@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {View, Image, Text, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -9,19 +9,20 @@ import {
 import BottomTabNavigator from './BottomTabNavigator';
 
 import ProfileScreen from '../screens/auth/ProfileScreen';
-import More from '../screens/More';
+import More from '../screens/more/More';
 
-import {BASE_URL} from '../hooks/HandleApis';
+import { BASE_URL } from '../hooks/HandleApis';
 
 import DrawerNavigatorcss from '../assets/css/DrawerNavigatorcss';
 import Icon from '../ui/components/icon';
 
 const Drawer = createDrawerNavigator();
 import useAuth from '../hooks/HandleAuth';
-const CustomDrawerContent = ({...props}) => {
-  const {handleLogout} = useAuth();
+import ShortVideos from '../screens/short_videos/ShortVideos';
+const CustomDrawerContent = ({ ...props }) => {
+  const { handleLogout } = useAuth();
 
-  const {userData, setUserId} = props;
+  const { userData, setUserId } = props;
 
   const handleSignOut = async () => {
     try {
@@ -31,6 +32,13 @@ const CustomDrawerContent = ({...props}) => {
       console.error('Error signing out:', error);
     }
   };
+
+  const separateNames = fullname => {
+    const splitname = fullname.split(" ")
+    const firstname = splitname[0]
+    return firstname
+  }
+
   return (
     <DrawerContentScrollView {...props}>
       <View style={DrawerNavigatorcss.header}>
@@ -45,9 +53,8 @@ const CustomDrawerContent = ({...props}) => {
               />
             </View>
             <Text style={DrawerNavigatorcss.NameText}>
-                Hi {userData.name}
+              Hi {separateNames(userData.name)}
             </Text>
-            <Text style={DrawerNavigatorcss.EmailText}>{userData.email}</Text>
           </>
         )}
       </View>
@@ -128,7 +135,7 @@ const DrawerNavigator = ({
 
   return (
     <Drawer.Navigator
-      screenOptions={({navigation}) => ({
+      screenOptions={({ navigation }) => ({
         headerStyle: {
           backgroundColor: '#087E8B',
           height: 50,
@@ -178,17 +185,6 @@ const DrawerNavigator = ({
         }}
       />
       <Drawer.Screen
-        name="ProfileScreen"
-        children={() => <ProfileScreen userId={userId} setUserId={setUserId} />}
-        options={{
-          title: 'Profile',
-          labelStyle: DrawerNavigatorcss.drawerLabelWhite,
-          headerTitle: () => (
-            <Text style={DrawerNavigatorcss.headerTitle}>Profile</Text>
-          ),
-        }}
-      />
-      <Drawer.Screen
         name="More"
         children={() => <More userId={userId} />}
         options={{
@@ -196,6 +192,33 @@ const DrawerNavigator = ({
           labelStyle: DrawerNavigatorcss.drawerLabelWhite,
           headerTitle: () => (
             <Text style={DrawerNavigatorcss.headerTitle}>More</Text>
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="ShortVideos"
+        component={ShortVideos}
+        options={{
+          title: 'Videos',
+          labelStyle: DrawerNavigatorcss.drawerLabelWhite,
+          headerStyle: {
+            borderBottomColor: '#fff',
+            backgroundColor: '#087E8B',
+            borderBottomWidth: 2,
+          },
+          headerTitle: () => (
+            <Text style={DrawerNavigatorcss.headerTitle}>Videos</Text>
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="ProfileScreen"
+        children={() => <ProfileScreen userId={userId} setUserId={setUserId} />}
+        options={{
+          title: 'Profile',
+          labelStyle: DrawerNavigatorcss.drawerLabelWhite,
+          headerTitle: () => (
+            <Text style={DrawerNavigatorcss.headerTitle}>Profile</Text>
           ),
         }}
       />
