@@ -18,7 +18,7 @@
         </div>
         <div class="main">
             <div class="dashboard-header">
-                <h1>Dashboard</h1>
+                <h4>Web Users</h4>
                 <hr>
             </div>
             <div class="card">
@@ -26,7 +26,7 @@
                     <div class="card-header bg-transparent" style="display: flex; justify-content: space-between;">
                         <h4>Web Users</h4>
                         <button id="update-user-button" class="btn btn-info" onclick="openAddUserModal()">
-                            <i class="fa fa-user-plus"></i> Add New User
+                            <i class="fa fa-user-plus"></i> +Add New User
                         </button>
                     </div>
                     <div class="container">
@@ -48,7 +48,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                                 @foreach ($users as $user)
                                     <tr class="userId">
                                         <td class="username" data-username={{ $user->name }}>{{ $user->name }}
@@ -57,21 +56,14 @@
                                         <td class="phone" data-phone={{ $user->phone }}>{{ $user->phone }}</td>
                                         <td></td>
                                         <td>
-                                            <a class="text-danger" href="#"
-                                                onclick="deleteUser({{ $user->id }})">Delete</a>
-                                            <button id="update-user-button" class="view-button"
-                                                data-userId={{ $user->id }}
-                                                onclick="openUserModal({{ $user->id }}, '{{ $user->name }}', '{{ $user->email }}')">
-                                                View
-                                            </button>
+                                           @include('admin.pages.components.delete')
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-
                     </div>
-                    {{-- --User Modal- --}}
+                    {{-- Update User Modal --}}
                     <div id="user-modal" class="modal">
                         <div class="modal-content">
                             <div class="modal-head">
@@ -111,16 +103,15 @@
                                                 class="btn btn-outline-primary">Cancel</button>
                                         </div>
                                     </div>
-
-
                                 </form>
                             </div>
                         </div>
-                    </div>{{-- --User Modal- --}}
+                    </div>
+                    {{-- New User Modal --}}
                     <div id="add-user-modal" class="modal">
                         <div class="modal-content">
                             <div class="modal-head">
-                                <h4>{{ $user->name }}</h4>
+                                <h4>Add New User</h4>
                             </div>
                             <hr>
                             <div class="modal-body">
@@ -200,11 +191,9 @@
                                         document.getElementById("passwordLengthValue").innerText = length;
                                     }
                                 </script>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

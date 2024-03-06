@@ -28,7 +28,7 @@ class AdminController extends Controller
     }
     public function users()
     {
-        return view('admin.pages.users');
+        return view('admin.pages.users.users');
     }
     public function announcements()
     {
