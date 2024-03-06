@@ -39,6 +39,8 @@ Route::get('/fetchEvents', [MobileApiController::class, 'fetchEvents']);
 Route::get('/fetchAnnouncements', [MobileApiController::class, 'fetchAnnouncements']);
 Route::get('/fetchSermonnotes', [MobileApiController::class, 'fetchSermonnotes']);
 Route::get('/fetchSermons', [MobileApiController::class, 'fetchSermons']);
+// fetchShortVideo
+Route::get('/fetchShortVideo', [MobileApiController::class, 'fetchShortVideo']);
 
 // Profile
 Route::get('/profile/{userId}', [MobileApiController::class, 'fetchProfile']);

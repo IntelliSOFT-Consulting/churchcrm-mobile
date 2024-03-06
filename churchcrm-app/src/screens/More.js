@@ -20,6 +20,7 @@ const menuItems = [
   },
   {iconName: 'codepen-circle', text: 'Notes', screenName: 'Notes'},
   {iconName: 'picture', text: 'Events', screenName: 'EventsScreen'},
+  // {iconName: 'picture', text: 'Short Videos', screenName: 'ShortVideos'},
   {iconName: 'sharealt', text: 'Share App', screenName: 'ShareAppScreen'},
   {iconName: 'info', text: 'About App', screenName: 'AboutAppScreen'},
   {

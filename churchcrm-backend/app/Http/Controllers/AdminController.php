@@ -548,7 +548,7 @@ class AdminController extends Controller
     //shortvideos
     public function shortvideos()
     {
-        return view('admin.pages.short-videos');
+        return view('admin.pages.short-videos.short-videos');
     }
 
     public function shortvideoupload(Request $request)

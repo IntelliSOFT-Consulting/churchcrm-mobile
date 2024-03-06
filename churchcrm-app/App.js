@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import React, {useState, useEffect} from 'react';
+import {View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import LandingScreen from './src/LandingScreen';
 import LoginScreen from './src/screens/auth/LoginScreen';
 import SignupScreen from './src/screens/auth/SignupScreen';
@@ -31,7 +31,7 @@ import EventItem from './src/screens/events/EventItem';
 
 function App() {
   const [reloadNotes, setReloadNotes] = useState(false);
-  const { getStoredUserData } = useAuth();
+  const {getStoredUserData} = useAuth();
   const [userId, setUserId] = useState();
   const [noteId, setNoteId] = useState(null);
   const [announcement, setAnnouncement] = useState(null);
@@ -42,34 +42,43 @@ function App() {
   const [loginTime, setLoginTime] = useState();
 
   useEffect(() => {
-    const time_out = 6 * 60 * 60 * 1000
+    const time_out = 6 * 60 * 60 * 1000;
 
     const fetchUserId = async () => {
       const storedUserData = await getStoredUserData();
 
-      if (storedUserData && storedUserData.retrieved_userId && storedUserData.retrieved_token && storedUserData.retrieved_time) {
+      if (
+        storedUserData &&
+        storedUserData.retrieved_userId &&
+        storedUserData.retrieved_token &&
+        storedUserData.retrieved_time
+      ) {
         setUserId(storedUserData.retrieved_userId);
 
         setTimeout(async () => {
           let time_now = new Date();
-          const time_diff = (time_now.getTime() - storedUserData.retrieved_time) / (1000);
-          console.log("Current diff: ", time_diff)
-          console.log(`Login time ${storedUserData.retrieved_time} Current time: ${time_now.getTime()}`)
+          const time_diff =
+            (time_now.getTime() - storedUserData.retrieved_time) / 1000;
+          console.log('Current diff: ', time_diff);
+          console.log(
+            `Login time ${
+              storedUserData.retrieved_time
+            } Current time: ${time_now.getTime()}`,
+          );
           if (time_diff > time_out) {
-            const { handleLogout } = useAuth();
-            console.log("Logging out")
+            const {handleLogout} = useAuth();
+            console.log('Logging out');
             try {
-              const { logout_ID, logout_Token } = await handleLogout();
+              const {logout_ID, logout_Token} = await handleLogout();
               setUserId(logout_ID);
               setToken(logout_Token);
             } catch (error) {
               console.error('Error signing out:', error);
             }
+          } else {
+            console.log('Current time difference: ', time_diff);
           }
-          else {
-            console.log("Current time difference: ", time_diff)
-          }
-        }, time_out)
+        }, time_out);
       } else {
         setUserId(null);
         setToken(null);
@@ -89,39 +98,46 @@ function App() {
               <Stack.Screen
                 name="SplashScreen"
                 component={SplashScreen}
-                options={{ headerShown: false }}
+                options={{headerShown: false}}
               />
               <Stack.Screen
                 name="LandingScreen"
                 component={LandingScreen}
-                options={{ headerShown: false }}
+                options={{headerShown: false}}
               />
               <Stack.Screen
                 name="LoginScreen"
                 children={() => (
-                  <LoginScreen setUserId={setUserId} userId={userId} setToken={setToken} token={token} setLoginTime={setLoginTime} loginTime={loginTime} />
+                  <LoginScreen
+                    setUserId={setUserId}
+                    userId={userId}
+                    setToken={setToken}
+                    token={token}
+                    setLoginTime={setLoginTime}
+                    loginTime={loginTime}
+                  />
                 )}
-                options={{ title: 'Login' }}
+                options={{title: 'Login'}}
               />
               <Stack.Screen
                 name="SignupScreen"
                 component={SignupScreen}
-                options={{ title: 'Register' }}
+                options={{title: 'Register'}}
               />
               <Stack.Screen
                 name="ForgotPassword"
                 component={ForgotPassword}
-                options={{ title: 'Reset Password' }}
+                options={{title: 'Reset Password'}}
               />
               <Stack.Screen
                 name="Resetpasswordcode"
                 component={ResetCode}
-                options={{ title: 'Reset Code' }}
+                options={{title: 'Reset Code'}}
               />
               <Stack.Screen
                 name="NewPassword"
                 component={NewPassword}
-                options={{ title: 'New Password' }}
+                options={{title: 'New Password'}}
               />
             </>
           ) : (
@@ -144,7 +160,7 @@ function App() {
                     sermon={sermon}
                   />
                 )}
-                options={{ headerShown: false, title: '' }}
+                options={{headerShown: false, title: ''}}
               />
 
               <Stack.Screen
@@ -152,12 +168,12 @@ function App() {
                 children={() => (
                   <ProfileScreen userId={userId} setUserId={setUserId} />
                 )}
-                options={{ title: 'Profile' }}
+                options={{title: 'Profile'}}
               />
               <Stack.Screen
                 name="SettingScreen"
                 component={SettingScreen}
-                options={{ title: 'Settings' }}
+                options={{title: 'Settings'}}
               />
               <Stack.Screen
                 name="NewNotes"
@@ -237,7 +253,12 @@ function App() {
               />
               <Stack.Screen
                 name="AnnouncementView"
-                children={() => <AnnouncementView announcement={announcement} setAnnouncement={setAnnouncement} />}
+                children={() => (
+                  <AnnouncementView
+                    announcement={announcement}
+                    setAnnouncement={setAnnouncement}
+                  />
+                )}
                 options={{
                   title: 'Announcements',
                   headerStyle: {
@@ -248,7 +269,9 @@ function App() {
               />
               <Stack.Screen
                 name="AnnouncementItem"
-                children={() => <AnnouncementView announcement={announcement} />}
+                children={() => (
+                  <AnnouncementView announcement={announcement} />
+                )}
                 options={{
                   title: '',
                   headerStyle: {
@@ -270,7 +293,9 @@ function App() {
               />
               <Stack.Screen
                 name="VideoPlayer"
-                children={() => <VideoPlayer sermon={sermon} setSermon={setSermon} />}
+                children={() => (
+                  <VideoPlayer sermon={sermon} setSermon={setSermon} />
+                )}
                 options={{
                   title: 'Sermons',
                   headerStyle: {
@@ -304,7 +329,12 @@ function App() {
 
               <Stack.Screen
                 name="SermonNotesView"
-                children={() => <SermonNotesView setSermonNote={setSermonNote} sermonNote={sermonNote} />}
+                children={() => (
+                  <SermonNotesView
+                    setSermonNote={setSermonNote}
+                    sermonNote={sermonNote}
+                  />
+                )}
                 options={{
                   title: 'Sermon Notes',
                   headerStyle: {
