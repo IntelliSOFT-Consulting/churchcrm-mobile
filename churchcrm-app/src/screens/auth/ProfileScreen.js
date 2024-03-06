@@ -302,32 +302,6 @@ export default function ProfileScreen({ userId, setUserId }) {
                         }
                       />
 
-                      <Dropdown
-                        style={styles.dropdown}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        data={membership}
-                        search
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        placeholder="Select item"
-                        searchPlaceholder="Search..."
-                        value={value}
-                        onChange={item => {
-                          setValue(item.value);
-                        }}
-                        renderLeftIcon={() => (
-                          <Icon
-                            style={styles.icon}
-                            color="black"
-                            name="person"
-                            size={20}
-                          />
-                        )}
-                      />
                     </View>
                     <AppSnackbar ref={appSnackbarRef} />
 

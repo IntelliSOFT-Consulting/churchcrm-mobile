@@ -3,10 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View } from 'react-native';
 import SermonScreen from '../screens/sermons/SermonScreen';
-import EventsScreen from '../screens/EventsScreen';
-import Notes from '../screens/Notes';
+import EventsScreen from '../screens/events/EventsScreen';
+import Notes from '../screens/notes/Notes';
 import HomeStackNavigator from '../screens/home/HomeScreen';
-import Events from '../screens/ListView/Events';
+import Events from '../screens/events/Events';
 
 const HomeScreen = 'Home';
 const Sermons = 'Sermons';
