@@ -29,13 +29,7 @@
                             <i class="fa fa-user-plus"></i> Add New User
                         </button>
                     </div>
-                    <div class="container">
-                        @if (session('message'))
-                            <div class="alert alert-success">
-                                {{ session('message') }}
-                            </div>
-                        @endif
-                    </div>
+                    @include('admin.pages.components.message-alert')
                     @include('admin.pages.components.web-users-table')
                     @include('admin.pages.components.new-user-modal')
                 </div>

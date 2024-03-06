@@ -543,7 +543,7 @@ class AdminController extends Controller
 
     public function adminprofile()
     {
-        return view('admin.pages.adminprofile');
+        return view('admin.pages.admin-profile.adminprofile');
     }
     //shortvideos
     public function shortvideos()
