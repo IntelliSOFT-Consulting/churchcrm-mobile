@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { ScrollView, RefreshControl } from 'react-native';
 import VerseOfTheDay from '../VerseOfTheDay/VerseOfTheDay';
-import Announcements from '../ListView/Announcements';
-import Sermons from '../ListView/Sermons';
-import SermonsNotes from '../ListView/SermonNotes';
+import Announcements from '../announcements/Announcements';
+import Sermons from '../sermons/Sermons';
+import SermonNotes from '../sermon_notes/SermonNotes';
 
 const Home = ({ setAnnouncement, announcement, setSermonNote, sermonNote, setSermon, sermon }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -37,7 +37,7 @@ const Home = ({ setAnnouncement, announcement, setSermonNote, sermonNote, setSer
       <VerseOfTheDay data={data.verseOfTheDay} />
       <Announcements data={data.announcements} setAnnouncement={setAnnouncement} announcement={announcement}/>
       <Sermons data={data.sermons} setSermon={setSermon} sermon={sermon}/>
-      <SermonsNotes data={data.sermonNotes} setSermonNote={setSermonNote} sermonNote={sermonNote} />
+      <SermonNotes data={data.sermonNotes} setSermonNote={setSermonNote} sermonNote={sermonNote} />
     </ScrollView>
   );
 };
