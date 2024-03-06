@@ -21,17 +21,10 @@
             <div class="dashboard-header">
                 <h1>Profile</h1>
                 <hr>
-                @include('admin.layout.error')
-                @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
-                @if (session('message'))
-                    <div class="alert alert-success">
-                        {{ session('message') }}
-                    </div>
-                @endif
+                @include('admin.pages.components.error')
+               
+                @include('admin.pages.components.message-alert')
+
             </div>
 
             <form class="form" action="{{ url('/update-profile', $user->id) }}" method="POST"

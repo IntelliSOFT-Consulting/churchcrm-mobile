@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password_reset_code_time')->nullable();
             $table->string('phone');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('membership_status')->default('new member');
+            $table->string('membership_status')->default('new member')->nullable();
             $table->boolean('usertype')->default(false);
             $table->string('password');
             $table->rememberToken();
