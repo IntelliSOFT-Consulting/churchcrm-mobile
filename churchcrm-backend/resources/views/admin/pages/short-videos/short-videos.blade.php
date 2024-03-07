@@ -44,9 +44,8 @@
                                 <div class="scroll-card">
                                     <div class="card-body">
                                         <img style="height: 200px; width: 300px;" alt="image"
-                                            src="ShortVideoThumbnails/{{ $LShortVideo->Thumbnail }}">
+                                            src="ShortVideoThumbnails/{{ $LShortVideo->thumbnail_path }}">
                                         <div>
-                                            <p>{{ $LShortVideo->sermon_date }}</p>
                                             <h6>
                                                 {{ Illuminate\Support\Str::limit($LShortVideo->title, $limit = 25, $end = '...') }}
                                             </h6>
