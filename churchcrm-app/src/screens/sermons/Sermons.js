@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
-import { styles } from '../../assets/css/HomeScreen';
+import React, {useEffect, useState} from 'react';
+import {View, ScrollView, Text, Image, TouchableOpacity} from 'react-native';
+import {styles} from '../../assets/css/HomeScreen';
 import SermonItem from './SermonItem';
-import { fetchDataByEndpoint } from '../../hooks/HandleApis';
-import { useNavigation } from '@react-navigation/native';
+import {fetchDataByEndpoint} from '../../hooks/HandleApis';
+import {useNavigation} from '@react-navigation/native';
 import GlobalCss from '../../assets/css/GlobalCss';
 
 export const fetchSermons = async () => {
   return fetchDataByEndpoint('fetchSermons');
 };
 
-export default function Sermons({ setSermon, sermon }) {
+export default function Sermons({setSermon, sermon}) {
   const navigation = useNavigation();
   const [sermonsData, setSermonsData] = useState([]);
   const [sermonsLoading, setSermonsLoading] = useState(true);
@@ -40,10 +40,9 @@ export default function Sermons({ setSermon, sermon }) {
             <TouchableOpacity
               key={sermonClicked.id}
               onPress={() => {
-                setSermon(sermonClicked)
-                navigation.navigate('VideoPlayer')
-              }
-              }>
+                setSermon(sermonClicked);
+                navigation.navigate('VideoPlayer');
+              }}>
               <SermonItem sermon={sermonClicked} />
             </TouchableOpacity>
           ))

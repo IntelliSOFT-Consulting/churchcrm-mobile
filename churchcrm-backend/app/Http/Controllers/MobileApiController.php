@@ -9,6 +9,7 @@ use App\Models\SermonNotes;
 use App\Models\Sermons;
 use Illuminate\Http\Request;
 use App\Models\AppUser;
+use App\Models\ShortVideo;
 use Illuminate\Support\Facades\Storage;
 
 class MobileApiController extends Controller
@@ -37,6 +38,10 @@ class MobileApiController extends Controller
     public function fetchProfile($userId)
     {
         $data = AppUser::where('id', $userId)->first();
+        return response()->json($data);
+    }
+    public function fetchShortVideo(){
+        $data = ShortVideo::orderBy('id', 'desc')->get();
         return response()->json($data);
     }
 
