@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "ChurchCRM_Mobile.app"
-               BlueprintName = "ChurchCRM_Mobile"
-               ReferencedContainer = "container:ChurchCRM_Mobile.xcodeproj">
+               BuildableName = "KCC.app"
+               BlueprintName = "KCC"
+               ReferencedContainer = "container:KCC.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "ChurchCRM_MobileTests.xctest"
-               BlueprintName = "ChurchCRM_MobileTests"
-               ReferencedContainer = "container:ChurchCRM_Mobile.xcodeproj">
+               BuildableName = "KCCTests.xctest"
+               BlueprintName = "KCCTests"
+               ReferencedContainer = "container:KCC.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ChurchCRM_Mobile.app"
-            BlueprintName = "ChurchCRM_Mobile"
-            ReferencedContainer = "container:ChurchCRM_Mobile.xcodeproj">
+            BuildableName = "KCC.app"
+            BlueprintName = "KCC"
+            ReferencedContainer = "container:KCC.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ChurchCRM_Mobile.app"
-            BlueprintName = "ChurchCRM_Mobile"
-            ReferencedContainer = "container:ChurchCRM_Mobile.xcodeproj">
+            BuildableName = "KCC.app"
+            BlueprintName = "KCC"
+            ReferencedContainer = "container:KCC.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
