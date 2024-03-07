@@ -9,6 +9,7 @@ import {
 import {styles} from './ShortVideosCss';
 import {fetchDataByEndpoint} from '../../hooks/HandleApis';
 import {BASE_URL} from '../../hooks/HandleApis';
+import Video from 'react-native-video';
 
 export const fetchShortVideo = async () => {
   return fetchDataByEndpoint('fetchShortVideo');
@@ -22,6 +23,7 @@ export default function ShortVideos() {
     date: 'Default Date',
     title: 'Default Title(default video)',
     thumbnail_path: `${BASE_URL}/ShortVideoThumbnails/default_thumbnail.jpeg`,
+    videourl: `${BASE_URL}/Shortvideos/1709727126.mp4`,
   });
 
   useEffect(() => {
@@ -38,33 +40,33 @@ export default function ShortVideos() {
   }, []);
 
   const handleVideoClick = video => {
-    setSelectedVideo(video);
+    const videourl = `${BASE_URL}/Shortvideos/${video.video_path}`;
+    setSelectedVideo({...video, videourl});
+    console.log(selectedVideo);
   };
 
   return (
     <View>
       <ScrollView horizontal={false}>
         <View style={styles.heroSection}>
-          <ImageBackground
-            style={styles.image}
-            imageStyle={styles.image}
-            resizeMode="cover"
-            source={{
-              uri: `${BASE_URL}/ShortVideoThumbnails/${selectedVideo.thumbnail_path}`,
-            }}>
-            <View style={styles.imageOverlay}></View>
-            <View style={styles.textContainer}>
-              <Text style={styles.dataDate}>{selectedVideo.date}</Text>
-              <Text style={styles.text}>{selectedVideo.title}</Text>
-            </View>
-          </ImageBackground>
+          <View>
+            <Video
+              source={{
+                uri: `${BASE_URL}/Shortvideos/${selectedVideo.video_path}`,
+              }}
+              style={{width: 300, height: 300}}
+              controls={true}
+              ref={ref => {
+                this.player = ref;
+              }}
+            />
+          </View>
         </View>
-
         <View style={styles.videoArraySection}>
           <Text style={styles.title}>WATCH HISTORY</Text>
           <View style={styles.videoRow}>
             {shortvideoLoading ? (
-              <Text style={styles.loadingText}>Loading short videos...</Text>
+              <Text style={styles.loadingText}>Loading videos...</Text>
             ) : shortvideoData.length > 0 ? (
               shortvideoData.map(video => (
                 <TouchableOpacity
@@ -89,7 +91,7 @@ export default function ShortVideos() {
                 </TouchableOpacity>
               ))
             ) : (
-              <Text style={styles.loadingText}>No short videos available</Text>
+              <Text style={styles.loadingText}>No videos available</Text>
             )}
           </View>
         </View>

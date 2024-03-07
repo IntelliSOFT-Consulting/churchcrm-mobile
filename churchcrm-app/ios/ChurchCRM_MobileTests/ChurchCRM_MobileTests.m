@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface ChurchCRM_MobileTests : XCTestCase
+@interface KCCTests : XCTestCase
 
 @end
 
-@implementation ChurchCRM_MobileTests
+@implementation KCCTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
