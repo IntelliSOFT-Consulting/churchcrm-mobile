@@ -1,23 +1,35 @@
 import React, {useEffect, useState} from 'react';
-import {View, ScrollView, Text, ImageBackground, FlatList} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Text,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import {styles} from './ShortVideosCss';
 import {fetchDataByEndpoint} from '../../hooks/HandleApis';
+import {BASE_URL} from '../../hooks/HandleApis';
 
 export const fetchShortVideo = async () => {
   return fetchDataByEndpoint('fetchShortVideo');
 };
 
 export default function ShortVideos() {
-  const [shortvideoData, setshortvideo] = useState([]);
-  const [shortvideoLoading, setshortvideoLoading] = useState(true);
+  const [shortvideoData, setShortvideoData] = useState([]);
+  const [shortvideoLoading, setShortvideoLoading] = useState(true);
+  const [selectedVideo, setSelectedVideo] = useState({
+    id: 0,
+    date: 'Default Date',
+    title: 'Default Title(default video)',
+    thumbnail_path: `${BASE_URL}/ShortVideoThumbnails/default_thumbnail.jpeg`,
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const videos = await fetchShortVideo();
-        setshortvideo(videos);
-        console.log(videos);
-
-        setshortvideoLoading(false);
+        setShortvideoData(videos);
+        setShortvideoLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -25,52 +37,59 @@ export default function ShortVideos() {
     fetchData();
   }, []);
 
+  const handleVideoClick = video => {
+    setSelectedVideo(video);
+  };
+
   return (
     <View>
       <ScrollView horizontal={false}>
         <View style={styles.heroSection}>
-          <View style={styles.sermonTouchable}>
-            <ImageBackground
-              style={styles.image}
-              imageStyle={styles.image}
-              resizeMode="cover"
-              source={require('../../assets/images/two.jpg')}>
-              <View style={styles.imageOverlay}></View>
-              <View style={styles.textContainer}>
-                <Text style={styles.dataDate}>05 March 2023</Text>
-
-                <Text style={styles.text}>Embracing Community</Text>
-              </View>
-            </ImageBackground>
-          </View>
+          <ImageBackground
+            style={styles.image}
+            imageStyle={styles.image}
+            resizeMode="cover"
+            source={{
+              uri: `${BASE_URL}/ShortVideoThumbnails/${selectedVideo.thumbnail_path}`,
+            }}>
+            <View style={styles.imageOverlay}></View>
+            <View style={styles.textContainer}>
+              <Text style={styles.dataDate}>{selectedVideo.date}</Text>
+              <Text style={styles.text}>{selectedVideo.title}</Text>
+            </View>
+          </ImageBackground>
         </View>
 
         <View style={styles.videoArraySection}>
           <Text style={styles.title}>WATCH HISTORY</Text>
-
           <View style={styles.videoRow}>
             {shortvideoLoading ? (
-              <Text style={styles.loadingText}>Loading shortvideo...</Text>
-            ) : shortvideoData && shortvideoData.length > 0 ? (
-              shortvideoData.map(sermonClicked => (
-                <View style={styles.videoColumn}>
+              <Text style={styles.loadingText}>Loading short videos...</Text>
+            ) : shortvideoData.length > 0 ? (
+              shortvideoData.map(video => (
+                <TouchableOpacity
+                  key={video.id}
+                  style={styles.videoColumn}
+                  onPress={() => handleVideoClick(video)}>
                   <ImageBackground
                     style={styles.videoImage}
                     imageStyle={styles.videoImage}
                     resizeMode="cover"
-                    source={require('../../assets/images/two.jpg')}>
+                    source={{
+                      uri: `${BASE_URL}/ShortVideoThumbnails/${video.thumbnail_path}`,
+                    }}>
                     <View style={styles.videoOverlay}>
                       <Text>Video Overlay</Text>
                     </View>
                     <View style={styles.videoTextContainer}>
-                      <Text style={styles.videoDate}>05 March 2023</Text>
-                      <Text style={styles.videoText}>Embracing Community</Text>
+                      <Text style={styles.videoDate}>{video.date}</Text>
+                      <Text style={styles.videoText}>{video.title}</Text>
                     </View>
                   </ImageBackground>
-                </View>
+                </TouchableOpacity>
               ))
             ) : (
-              <Text style={styles.loadingText}>No Shortvideo available</Text>
+              <Text style={styles.loadingText}>No short videos available</Text>
             )}
           </View>
         </View>
