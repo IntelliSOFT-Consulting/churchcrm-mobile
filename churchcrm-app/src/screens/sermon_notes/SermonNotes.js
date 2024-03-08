@@ -11,12 +11,10 @@ export default function SermonNotes({ setSermonNote }) {
   const [sermonsNotesLoading, setSermonsNotesLoading] = useState(true);
 
   useEffect(() => {
-    console.log("FETCHING SERMON NOTES")
     const fetchData = async () => {
       try {
         const responses = await fetchAllData()
         if (responses) {
-          // const allData = await Promise.all(responses.map(res => res.json()))
           setSermonsNotesData(responses[2])
           setSermonsNotesLoading(false)
         } else {
