@@ -16,16 +16,14 @@ export default function Sermons({setSermon, sermon}) {
   const [sermonsLoading, setSermonsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("FETCHING SERMONS")
     const fetchData = async () => {
       try {
         const responses = await fetchAllData()
         if (responses) {
-          // const allData = await Promise.all(responses.map(res => res.json()))
           setSermonsData(responses[3])
           setSermonsLoading(false)
         } else {
-          console.error('Error fetching data: Responses array is null or not an array');
+          console.error('Error fetching sermons data');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
