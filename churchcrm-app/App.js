@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
+import {AppState} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -30,63 +31,79 @@ import SermonNoteItem from './src/screens/sermon_notes/SermonNoteItem';
 import EventItem from './src/screens/events/EventItem';
 
 function App() {
-  const [reloadNotes, setReloadNotes] = useState(false);
+  const ALLOWED_IDLE_TIME = 6 * 60 * 60 * 1000; // 6 hours
+
   const {getStoredUserData} = useAuth();
   const [userId, setUserId] = useState();
+  const [token, setToken] = useState();
+  const [reloadNotes, setReloadNotes] = useState(false);
   const [noteId, setNoteId] = useState(null);
   const [announcement, setAnnouncement] = useState(null);
   const [sermonNote, setSermonNote] = useState(null);
   const [sermon, setSermon] = useState(null);
-  const [event, setEvent] = useState(null);
-  const [token, setToken] = useState();
-  const [loginTime, setLoginTime] = useState();
 
   useEffect(() => {
-    const time_out = 6 * 60 * 60 * 1000;
+    const handleAppStateChange = async nextAppState => {
+      if (nextAppState === 'inactive') {
+        try {
+          const prevNavTime = await AsyncStorage.getItem('prevNavTime');
+          const storedUserData = await getStoredUserData();
 
-    const fetchUserId = async () => {
-      const storedUserData = await getStoredUserData();
+          const currentTime = Date.now();
+          if (prevNavTime) {
+            const prevTime = parseInt(prevNavTime, 10);
+            const idleTime = currentTime - prevTime;
+            if (idleTime > ALLOWED_IDLE_TIME) {
+              console.log('2 -  User is logged out due to inactivity.');
+              setUserId(null);
+            } else {
+              console.log('3 User Not inactivity.');
 
-      if (
-        storedUserData &&
-        storedUserData.retrieved_userId &&
-        storedUserData.retrieved_token &&
-        storedUserData.retrieved_time
-      ) {
-        setUserId(storedUserData.retrieved_userId);
-
-        setTimeout(async () => {
-          let time_now = new Date();
-          const time_diff =
-            (time_now.getTime() - storedUserData.retrieved_time) / 1000;
-          console.log('Current diff: ', time_diff);
-          console.log(
-            `Login time ${
-              storedUserData.retrieved_time
-            } Current time: ${time_now.getTime()}`,
-          );
-          if (time_diff > time_out) {
-            const {handleLogout} = useAuth();
-            console.log('Logging out');
-            try {
-              const {logout_ID, logout_Token} = await handleLogout();
-              setUserId(logout_ID);
-              setToken(logout_Token);
-            } catch (error) {
-              console.error('Error signing out:', error);
+              const fetchUserId = async () => {
+                if (
+                  storedUserData &&
+                  storedUserData.retrieved_userId &&
+                  storedUserData.retrieved_token
+                ) {
+                  setUserId(storedUserData.retrieved_userId);
+                  setToken(storedUserData.retrieved_token);
+                } else {
+                  setUserId(null);
+                  setToken(null);
+                }
+              };
+              fetchUserId();
             }
-          } else {
-            console.log('Current time difference: ', time_diff);
           }
-        }, time_out);
+          await AsyncStorage.setItem('prevNavTime', currentTime.toString());
+        } catch (error) {
+          console.error('Error handling app state change:', error);
+        }
       } else {
-        setUserId(null);
-        setToken(null);
+        const fetchUserId = async () => {
+          const storedUserData = await getStoredUserData();
+          if (
+            storedUserData &&
+            storedUserData.retrieved_userId &&
+            storedUserData.retrieved_token
+          ) {
+            setUserId(storedUserData.retrieved_userId);
+            setToken(storedUserData.retrieved_token);
+          } else {
+            setUserId(null);
+            setToken(null);
+          }
+        };
+        fetchUserId();
       }
     };
 
-    fetchUserId();
-  }, [userId, token]);
+    AppState.addEventListener('change', handleAppStateChange);
+
+    // return () => {
+    //   AppState.removeEventListener('change', handleAppStateChange);
+    // };
+  }, [ALLOWED_IDLE_TIME, getStoredUserData]);
 
   const Stack = createStackNavigator();
   return (
@@ -113,8 +130,8 @@ function App() {
                     userId={userId}
                     setToken={setToken}
                     token={token}
-                    setLoginTime={setLoginTime}
-                    loginTime={loginTime}
+                    // setLoginTime={setLoginTime}
+                    // loginTime={loginTime}
                   />
                 )}
                 options={{title: 'Login'}}
