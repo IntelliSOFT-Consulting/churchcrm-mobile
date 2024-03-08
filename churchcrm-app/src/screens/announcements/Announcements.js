@@ -2,24 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../../assets/css/HomeScreen';
 import { useNavigation } from '@react-navigation/native';
-import { BASE_URL, fetchDataByEndpoint } from '../../hooks/HandleApis';
 import GlobalCss from '../../assets/css/GlobalCss';
 import AnnouncementItem from './AnnouncementItem';
-
-export const fetchAnnouncements = async () => {
-  return fetchDataByEndpoint('fetchAnnouncements');
-};
+import { fetchAllData } from '../../hooks/HandleApis';
 
 export default function Announcements({ setAnnouncement, announcement }) {
   const [announcementsData, setAnnouncementsData] = useState([]);
   const [announcementsLoading, setAnnouncementsLoading] = useState(true);
 
   useEffect(() => {
+    console.log("FETCHING ANNOUNCEMENTS")
     const fetchData = async () => {
       try {
-        const announcements = await fetchAnnouncements();
-        setAnnouncementsData(announcements);
-        setAnnouncementsLoading(false);
+        const responses = await fetchAllData()
+        if (responses) {
+          // const allData = await Promise.all(responses.map(res => res.json()))
+          setAnnouncementsData(responses[1]);
+          setAnnouncementsLoading(false);
+        } else {
+          console.error('Error fetching data: Responses array is null or not an array');
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }

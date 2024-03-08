@@ -40,7 +40,7 @@ Route::get('/fetchAnnouncements', [MobileApiController::class, 'fetchAnnouncemen
 Route::get('/fetchSermonnotes', [MobileApiController::class, 'fetchSermonnotes']);
 Route::get('/fetchSermons', [MobileApiController::class, 'fetchSermons']);
 // fetchShortVideo
-Route::get('/fetchShortVideo', [MobileApiController::class, 'fetchShortVideo']);
+Route::get('/fetchShortVideos', [MobileApiController::class, 'fetchShortVideo']);
 
 // Profile
 Route::get('/profile/{userId}', [MobileApiController::class, 'fetchProfile']);

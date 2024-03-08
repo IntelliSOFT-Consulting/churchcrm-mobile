@@ -34,9 +34,12 @@ const CustomDrawerContent = ({ ...props }) => {
   };
 
   const separateNames = fullname => {
-    const splitname = fullname.split(" ")
-    const firstname = splitname[0]
-    return firstname
+    if (fullname) {
+      const splitname = fullname.split(" ")
+      const firstname = splitname[0]
+      return firstname
+    }
+    
   }
 
   return (
