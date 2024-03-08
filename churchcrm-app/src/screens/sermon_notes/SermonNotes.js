@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../../assets/css/HomeScreen';
-import { BASE_URL, fetchDataByEndpoint } from '../../hooks/HandleApis';
+import { fetchAllData } from '../../hooks/HandleApis';
 import { useNavigation } from '@react-navigation/native';
 import SermonNoteItem from './SermonNoteItem';
 
-export const fetchSermonsNotes = async () => {
-  return fetchDataByEndpoint('fetchSermonnotes');
-};
 
 export default function SermonNotes({ setSermonNote }) {
   const [sermonsNotesData, setSermonsNotesData] = useState([]);
@@ -16,9 +13,13 @@ export default function SermonNotes({ setSermonNote }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const sermonNotes = await fetchSermonsNotes();
-        setSermonsNotesData(sermonNotes);
-        setSermonsNotesLoading(false);
+        const responses = await fetchAllData()
+        if (responses) {
+          setSermonsNotesData(responses[2])
+          setSermonsNotesLoading(false)
+        } else {
+          console.error('Error fetching data: Responses array is null or not an array');
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }

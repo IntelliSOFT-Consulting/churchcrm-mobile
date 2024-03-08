@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, ScrollView, Text, Image, TouchableOpacity} from 'react-native';
 import {styles} from '../../assets/css/HomeScreen';
 import SermonItem from './SermonItem';
-import {fetchDataByEndpoint} from '../../hooks/HandleApis';
+import { fetchAllData } from '../../hooks/HandleApis';
 import {useNavigation} from '@react-navigation/native';
 import GlobalCss from '../../assets/css/GlobalCss';
 
@@ -18,9 +18,13 @@ export default function Sermons({setSermon, sermon}) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const sermons = await fetchSermons();
-        setSermonsData(sermons);
-        setSermonsLoading(false);
+        const responses = await fetchAllData()
+        if (responses) {
+          setSermonsData(responses[3])
+          setSermonsLoading(false)
+        } else {
+          console.error('Error fetching sermons data');
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
