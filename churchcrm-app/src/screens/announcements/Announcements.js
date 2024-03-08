@@ -11,12 +11,10 @@ export default function Announcements({ setAnnouncement, announcement }) {
   const [announcementsLoading, setAnnouncementsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("FETCHING ANNOUNCEMENTS")
     const fetchData = async () => {
       try {
         const responses = await fetchAllData()
         if (responses) {
-          // const allData = await Promise.all(responses.map(res => res.json()))
           setAnnouncementsData(responses[1]);
           setAnnouncementsLoading(false);
         } else {
