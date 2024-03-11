@@ -31,11 +31,10 @@ import SermonNoteItem from './src/screens/sermon_notes/SermonNoteItem';
 import EventItem from './src/screens/events/EventItem';
 
 function App() {
-  const ALLOWED_IDLE_TIME = 6 * 60 * 60 * 1000; // 6 hours
-
-  const {getStoredUserData} = useAuth();
-  const [userId, setUserId] = useState();
-  const [token, setToken] = useState();
+  const ALLOWED_IDLE_TIME = 6 * 60 * 1000; 
+  const { getStoredUserData } = useAuth();
+  const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
   const [reloadNotes, setReloadNotes] = useState(false);
   const [noteId, setNoteId] = useState(null);
   const [announcement, setAnnouncement] = useState(null);
@@ -44,7 +43,7 @@ function App() {
 
   useEffect(() => {
     const handleAppStateChange = async nextAppState => {
-      if (nextAppState === 'inactive') {
+      if (nextAppState === 'inactive' || 'background') {
         try {
           const prevNavTime = await AsyncStorage.getItem('prevNavTime');
           const storedUserData = await getStoredUserData();
@@ -53,57 +52,43 @@ function App() {
           if (prevNavTime) {
             const prevTime = parseInt(prevNavTime, 10);
             const idleTime = currentTime - prevTime;
+            console.log('Idle time:', idleTime);
             if (idleTime > ALLOWED_IDLE_TIME) {
-              console.log('2 -  User is logged out due to inactivity.');
               setUserId(null);
+              await AsyncStorage.clear();
             } else {
-              console.log('3 User Not inactivity.');
-
-              const fetchUserId = async () => {
-                if (
-                  storedUserData &&
-                  storedUserData.retrieved_userId &&
-                  storedUserData.retrieved_token
-                ) {
-                  setUserId(storedUserData.retrieved_userId);
-                  setToken(storedUserData.retrieved_token);
-                } else {
-                  setUserId(null);
-                  setToken(null);
-                }
-              };
-              fetchUserId();
+              console.log('User is still active.');
+              if (
+                storedUserData?.retrieved_userId &&
+                storedUserData?.retrieved_token
+              ) {
+                setUserId(storedUserData.retrieved_userId);
+                setToken(storedUserData.retrieved_token);
+              }
             }
           }
           await AsyncStorage.setItem('prevNavTime', currentTime.toString());
         } catch (error) {
           console.error('Error handling app state change:', error);
         }
-      } else {
-        const fetchUserId = async () => {
-          const storedUserData = await getStoredUserData();
-          if (
-            storedUserData &&
-            storedUserData.retrieved_userId &&
-            storedUserData.retrieved_token
-          ) {
-            setUserId(storedUserData.retrieved_userId);
-            setToken(storedUserData.retrieved_token);
-          } else {
-            setUserId(null);
-            setToken(null);
-          }
-        };
-        fetchUserId();
+      } else if (nextAppState === 'active') {
+        try {
+          await AsyncStorage.removeItem('prevNavTime');
+        } catch (error) {
+          console.error('Error clearing AsyncStorage:', error);
+        }
       }
     };
 
-    AppState.addEventListener('change', handleAppStateChange);
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
 
-    // return () => {
-    //   AppState.removeEventListener('change', handleAppStateChange);
-    // };
-  }, [ALLOWED_IDLE_TIME, getStoredUserData]);
+    return () => {
+      subscription.remove();
+    };
+  }, [ALLOWED_IDLE_TIME, getStoredUserData, userId]);
 
   const Stack = createStackNavigator();
   return (
@@ -130,8 +115,6 @@ function App() {
                     userId={userId}
                     setToken={setToken}
                     token={token}
-                    // setLoginTime={setLoginTime}
-                    // loginTime={loginTime}
                   />
                 )}
                 options={{title: 'Login'}}
