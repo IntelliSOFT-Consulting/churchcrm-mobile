@@ -13,8 +13,8 @@ export default function Announcements({ setAnnouncement, announcement }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responses = await fetchAllData()
-        if (responses) {
+        const responses = await fetchAllData();
+        if (responses && Array.isArray(responses)) {
           setAnnouncementsData(responses[1]);
           setAnnouncementsLoading(false);
         } else {

@@ -26,17 +26,17 @@ export const apiCalls = [
   'fetchAnnouncements',
   'fetchSermonnotes',
   'fetchSermons',
-  'fetchShortVideos',
+  'fetchShortVideo',
 ]
 
 // map every url to the promise of the fetch
 export const fetchAllData = async () => {
   try {
     const responses = await Promise.all(apiCalls.map(apiCall => fetch(`${URL}${apiCall}`)));
-    const allData = await Promise.all(responses.map(res => res.json()))
+    const allData = await Promise.all(responses.map(response => response.json()));
     return allData;
   } catch (error) {
-    return console.error("An error occurred: ", error);
+    console.error("An error occurred: ", error);
+    throw error; 
   }
 }
-
